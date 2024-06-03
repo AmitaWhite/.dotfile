@@ -1,0 +1,40 @@
+function fish_prompt
+  echo #blank space from previous line
+
+  #Line 1
+    if not set -q VIRTUAL_ENV_DISABLE_PROMPT
+        set -g VIRTUAL_ENV_DISABLE_PROMPT true
+    end
+    set_color cyan
+    printf '[ %s ]' $USER
+    set_color normal
+    #        printf ' at '
+
+    #    set_color magenta
+    #    echo -n (prompt_hostname)
+    #    set_color normal
+    printf ' in '
+
+    set_color $fish_color_cwd
+    printf '%s' (prompt_pwd)
+    set_color normal
+
+    set -l branch (git symbolic-ref HEAD 2>/dev/null |sed -e 's/^refs\/heads\///')
+    set -l git_status (git status --porcelain 2>/dev/null |wc -l)
+    if test -n "$branch"
+      set_color magenta
+      echo -n "[$branch"
+      if test $git_status -gt 0
+        echo -n "*"
+      end
+      echo -n ">"
+    end
+
+    # Line 3 - arrow
+    echo
+    if test -n "$VIRTUAL_ENV"
+        printf "(%s) " (set_color blue)(basename $VIRTUAL_ENV)(set_color normal)
+    end
+    printf '🍎 =>  '
+    set_color normal
+end
