@@ -47,6 +47,8 @@ return {
 				"lua",
 				"luadoc",
 			},
+			sync_install = false,
+
 			incremental_selection = {
 				enable = true,
 				keymaps = {
