@@ -1,8 +1,8 @@
 local wezterm = require("wezterm")
 local config = wezterm.config_builder()
 
-config.initial_cols = 140
-config.initial_rows = 64
+config.initial_cols = 120
+config.initial_rows = 34
 
 -- wezterm 블러 처리
 config.window_background_opacity = 0.6
