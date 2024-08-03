@@ -3,3 +3,4 @@
 # !! Contents within this block are managed by 'conda init' !!
 #eval /Users/amitawhite/opt/anaconda3/bin/conda "shell.fish" "hook" $argv | source
 # <<< conda initialize <<<
+   alias desktophide '~/desktophide.sh'

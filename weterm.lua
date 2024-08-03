@@ -1,0 +1,42 @@
+local wezterm = require("wezterm")
+local config = wezterm.config_builder()
+
+config.initial_cols = 120
+config.initial_rows = 34
+
+-- wezterm 블러 처리
+config.window_background_opacity = 0.6
+config.macos_window_background_blur = 30
+
+-- 위에 테두리 사라짐
+config.window_decorations = "RESIZE"
+
+-- color scheme
+config.color_scheme = "AdventureTime"
+
+config.font = wezterm.font({
+	family = "JetBrains Mono",
+})
+config.font_size = 14
+
+config.colors = {
+	tab_bar = {
+		active_tab = {
+			bg_color = "#2b2042",
+			fg_color = "orange",
+			intensity = "Normal",
+			underline = "None",
+		},
+		inactive_tab = {
+			bg_color = "#1b1031",
+			fg_color = "#808080",
+		},
+		inactive_tab_hover = {
+			bg_color = "#3b3052",
+			fg_color = "green",
+			italic = true,
+		},
+	},
+}
+
+return config
