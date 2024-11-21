@@ -5,8 +5,8 @@ config.initial_cols = 120
 config.initial_rows = 34
 
 -- wezterm 블러 처리
-config.window_background_opacity = 0.6
-config.macos_window_background_blur = 30
+config.window_background_opacity = 0.3
+config.macos_window_background_blur = 15
 
 -- 위에 테두리 사라짐
 config.window_decorations = "RESIZE"
