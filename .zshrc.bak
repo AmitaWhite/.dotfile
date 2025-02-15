@@ -107,7 +107,9 @@ configure_prompt() {
     case "$PROMPT_ALTERNATIVE" in
         twoline)
             #PROMPT=$'%F{%(#.blue.green)}┌──${debian_chroot:+($debian_chroot)─}${VIRTUAL_ENV:+($(basename $VIRTUAL_ENV))─}(%B%F{%(#.red.blue)}%n'$prompt_symbol$'%m%b%F{%(#.blue.green)})-[%B%F{reset}%(6~.%-1~/…/%4~.%5~)%b%F{%(#.blue.green)}]\n└─%B%(#.%F{red}#.%F{blue}$)%b%F{reset} '
-	    PROMPT='%F{%(#.blue.green)}┌──${debian_chroot:+($debian_chroot)─}${VIRTUAL_ENV:+($(basename $VIRTUAL_ENV))─}(%B%F{%(#.red.blue)}%n㉿%m%b%F{%(#.blue.green)})-[%B%F{reset}%(6~.%-1~/…/%4~.%5~)%b%F{%(#.blue.green)}]$(git_branch)
+#	    PROMPT='%F{%(#.blue.green)}┌──${debian_chroot:+($debian_chroot)─}${VIRTUAL_ENV:+($(basename $VIRTUAL_ENV))─}(%B%F{%(#.red.blue)}%n㉿%m%b%F{%(#.blue.green)})-[%B%F{reset}%(6~.%-1~/…/%4~.%5~)%b%F{%(#.blue.green)}]$(git_branch) $CONDA_PREFIX
+#└─%B%(#.%F{red}#.%F{blue}$)%b%F{reset} '
+            PROMPT='%F{%(#.blue.green)}┌──${debian_chroot:+($debian_chroot)─}${VIRTUAL_ENV:+($(basename $VIRTUAL_ENV))─}(%B%F{%(#.red.blue)}%n㉿%m%b%F{%(#.blue.green)})-[%B%F{reset}%(6~.%-1~/…/%4~.%5~)%b%F{%(#.blue.green)}]$(git_branch)${CONDA_PREFIX:+ ($(basename $CONDA_PREFIX))} %F{yellow}[$(date +%H:%M:%S)]%F{reset}
 └─%B%(#.%F{red}#.%F{blue}$)%b%F{reset} '
 
             # Right-side prompt with exit codes and background processes
@@ -253,9 +255,10 @@ if [ -x /usr/bin/dircolors ]; then
 fi
 
 # some more ls aliases : need : sudo apt install lsd
+alias ls='lsd'
 alias ll='lsd -l'
 alias la='lsd -A'
-alias l='lsd -CF'
+#alias l='lsd -CF'
 alias lla='lsd -al'
 
 # neovim alias
@@ -268,7 +271,7 @@ alias zd='zed'
 alias zz='zellij'
 
 # batcat : need : sudo apt get install bat
-alias cat='batcat'
+alias cat='bat'
 
 # lazygit : need : refrence on lazygit (not nvim)
 alias lg='lazygit'
@@ -285,3 +288,20 @@ fi
 if [ -f /etc/zsh_command_not_found ]; then
     . /etc/zsh_command_not_found
 fi
+export PATH="/usr/local/opt/openjdk/bin:$PATH"
+
+# >>> conda initialize >>>
+# !! Contents within this block are managed by 'conda init' !!
+__conda_setup="$('/usr/local/Caskroom/miniconda/base/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
+if [ $? -eq 0 ]; then
+    eval "$__conda_setup"
+else
+    if [ -f "/usr/local/Caskroom/miniconda/base/etc/profile.d/conda.sh" ]; then
+        . "/usr/local/Caskroom/miniconda/base/etc/profile.d/conda.sh"
+    else
+        export PATH="/usr/local/Caskroom/miniconda/base/bin:$PATH"
+    fi
+fi
+unset __conda_setup
+# <<< conda initialize <<<
+
