@@ -4,8 +4,8 @@ return {
 	config = function()
 		require("toggleterm").setup({
 			open_mapping = [[<c-/>]],
-			-- direction = 'float',
-			direction = "horizontal",
+			--open_mapping = [[<leader>tt]],
+			direction = "float",
 			-- add size option
 			size = 11,
 			-- nvimTree 와 충돌 방지
