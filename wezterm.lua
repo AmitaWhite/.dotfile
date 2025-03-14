@@ -7,20 +7,32 @@ config.initial_rows = 44
 
 -- wezterm 블러 처리
 config.window_background_opacity = 0.6
-config.macos_window_background_blur = 30
+config.macos_window_background_blur = 15
 
 -- 위에 테두리 사라짐
-config.window_decorations = "RESIZE"
+--config.window_decorations = "RESIZE"
 
 -- tab_bar 스타일
+config.enable_tab_bar = false
 
 -- color scheme
 config.color_scheme = "AdventureTime"
 
-config.font = wezterm.font({
-	family = "JetBrains Mono",
+-- 한글을 이쁘게 커버하지 못하는 문제(글리프?) 해결을 위해 fallback(다른 커버 폰트) 설정
+config.font = wezterm.font_with_fallback({
+	"JetBrains Mono",
+	"Noto Sans CJK KR",
+	"Apple Color Emoji",
 })
 config.font_size = 14
+
+-- (추가) 광폭 문자 처리 관련 옵션
+-- East Asian Ambiguous 폭을 2칸으로 볼지 결정
+config.treat_east_asian_ambiguous_width_as_wide = true
+
+-- 이 옵션으로 네모 박스 글리프가 셀을 침범하는 것 제어
+-- Allways or Never 개인 취향
+config.allow_square_glyphs_to_overflow_width = "Never"
 
 config.colors = {
 	tab_bar = {
