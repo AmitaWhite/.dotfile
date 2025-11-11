@@ -81,9 +81,13 @@ return {
 		mason_lspconfig.setup_handlers({
 			-- default handler for installed servers
 			function(server_name)
-				lspconfig[server_name].setup({
-					capabilities = capabilities,
-				})
+				if lspconfig[server_name] then
+					lspconfig[server_name].setup({
+						capabilities = capabilities,
+					})
+				else
+					print("ERROR : lspconfig definition not found for server : " .. server_name)
+				end
 			end,
 			["svelte"] = function()
 				-- configure svelte server
@@ -104,7 +108,7 @@ return {
 				-- configure graphql language server
 				lspconfig["graphql"].setup({
 					capabilities = capabilities,
-					filetypes = { "graphql", "gql", "svelte", "javascriptreact", "typescriptreact" },
+					filetypes = { "graphql", "gql", "svelte", "typescriptreact", "javascriptreact" },
 				})
 			end,
 			["emmet_ls"] = function()
@@ -116,6 +120,9 @@ return {
 						"typescriptreact",
 						"javascriptreact",
 						"css",
+						"sass",
+						"scss",
+						"less",
 						"svelte",
 					},
 				})
@@ -123,6 +130,7 @@ return {
 			["lua_ls"] = function()
 				-- configure lua server (with special settings)
 				lspconfig["lua_ls"].setup({
+					root_dir = vim.fn_cwd(),
 					capabilities = capabilities,
 					settings = {
 						Lua = {
