@@ -12,7 +12,7 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 require("lazy").setup(
-	{ { import = "Amita.plugins", cond = not vim.g.vscode }, { import = "Amita.plugins.lsp", cond = not vim.g.vscode } },
+	{ { import = "Amita.plugins", cond = not vim.g.vscode } },
 	{
 		checker = {
 			enabled = true,
