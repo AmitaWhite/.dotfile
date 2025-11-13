@@ -1,9 +1,10 @@
 # 주요 추가 설정 및 변경
 
-> **arch linux** with **caelestia-dot shell [git][https://github.com/caelestia-dots/caelestia]
+> **arch linux** with \*\*caelestia-dot shell [git][https://github.com/caelestia-dots/caelestia]
 > 설정 중
 > caelestia-dot shell 설정 후 hyperland 세션에 초기 진입해서 foot(Terminal Emulator)을 열면
 > 시스템은 bash 를 쓰지만, session 자체는 fish 를 쓴다.
+>
 > - caelestia-git에서 clone 후(install.fish) 를 실행 하기 전에 이미 다운 받았을 것, 추가 Dependencies 도
 > - 기입되어 있으니 학인 가능
 
@@ -27,7 +28,6 @@ exec-one = fcitx5 &
 
 입력 해 주자
 
-
 ## 2. locale 설정
 
 - locale.conf 파일 중 화씨(F) -> 섭씨(C) 표현을 위해
@@ -44,7 +44,6 @@ LC_TIME=ja_JP.UTF-8
 
 - 그리고 locale.gen(시스템이 사용 할 수 있게 컴파일하는 locale-gen) 명령어 사용을위해
 - (en_US.UTF-8 , ja_JP.UTF-8 , ko_KR.UTF-8) 을 주석 해제 해 주자
-
 
 ## 3. 추가 lazyvim(nvim) 설정 변경
 
@@ -65,3 +64,8 @@ sudo systemctl start NetworkManager.service # NM 데몬 실행
 nmcli device wifi list # wifi 리스트 확인
 nmcli device wifi connection [your wifi name - ssid] paswword [your wifi passowrd - password]
 ```
+
+# 여기서 부터 추가
+
+- fish 파일 아래에 abbr 부분 잘 읽어보고 안 맞는거 삭제
+- starship 으로 설정하기 위해서 몇가지 Dependencies 확인필요
