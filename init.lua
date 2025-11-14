@@ -8,4 +8,3 @@ else
 	require("Amita.core")
 	require("Amita.lazy")
 end
-
