@@ -1,5 +1,4 @@
 .DS_*
-.gitignore
 tt.*
 .tests
 doc/tags
