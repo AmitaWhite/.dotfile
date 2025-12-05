@@ -2,6 +2,14 @@
 local util = require("utils.system-color")
 local current_style = util.get_system_colorscheme_style()
 
+-- transparent group 지정 (inline 힌트나, diagnostic 추가 텍스트 같은거)
+local transparent_groups = {
+  "^DiagnosticVirtualText",
+  "^LspInlayHint",
+  -- "^TsDefinition",
+  -- "^TSDefinitionUsage"
+}
+
 return {
   {
     "folke/tokyonight.nvim",
@@ -15,7 +23,17 @@ return {
         floats = "transparent",
       },
       on_highlights = function(hl, c)
+        -- commet 에 대한거
         hl.Comment = { fg = "#B48EAD", italic = true }
+
+        -- theme 에서 지원하지 않는 그룹들
+        for group, opts in pairs(hl) do
+          for _, pattern in ipairs(transparent_groups) do
+            if group:match(pattern) then
+              opts.bg = "none"
+            end
+          end
+        end
       end,
     },
     init = function()
