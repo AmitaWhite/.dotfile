@@ -13,16 +13,14 @@
     5. lazygit
     6. fzf
        ... else
+    7. {image}magick (image render)
 
 ## 환경 설정
 
-- bat , tldr 설치
+- bat , tldr, yazi, zed(linux는 zeditor라는 이름일 수 있음) 설치
 - fisher 설치 (fish 설정 프레임웤)
 - sdkman 설치
 
 ---
 
-# **TODO**
-
-- [x] : terminal 설정
-- [x] : lsp 분리 및 설정 -> result -> 어느정도 이해해서, 이제 jdtl 같은거 추가하면서 파일 구조 보강해야할듯
+## **TODO**

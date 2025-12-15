@@ -6,8 +6,8 @@ local current_style = util.get_system_colorscheme_style()
 local transparent_groups = {
   "^DiagnosticVirtualText",
   "^LspInlayHint",
-  -- "^TsDefinition",
-  -- "^TSDefinitionUsage"
+  "^TSDefinition",
+  "^TSDefinitionUsage",
 }
 
 return {

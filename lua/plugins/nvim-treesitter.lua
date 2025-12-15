@@ -5,6 +5,9 @@ return {
   {
     "nvim-treesitter/nvim-treesitter",
     opts = {
+      indent = { enable = true }, ---@type lazyvim.TSFeat
+      highlight = { enable = true }, ---@type lazyvim.TSFeat
+      folds = { enable = true }, ---@type lazyvim.TSFeat
       ensure_installed = {
         "bash",
         "html",
@@ -31,6 +34,8 @@ return {
       vim.list_extend(opts.ensure_installed, {
         "tsx",
         "typescript",
+        "toml",
+        "xml",
       })
     end,
   },
