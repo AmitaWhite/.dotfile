@@ -6,8 +6,12 @@ return {
     ---@class PluginLspOpts
     opts = {
       ---@type lspconfig.options
-      servers = {
-        -- pyright will be automatically installed with mason and loaded with lspconfig
+      servers = {},
+      diagnostics = {
+        float = {
+          border = "rounded",
+          source = "always",
+        },
       },
     },
   },

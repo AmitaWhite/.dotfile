@@ -5,7 +5,8 @@ return {
   opts = {
     options = {
       -- mode = "tabs",
-      separator_style = "slant",
+      -- kind of styles [slant, thick, thin] or {'any','any'}
+      separator_style = { "⭐️", "🌙" },
     },
   },
 }

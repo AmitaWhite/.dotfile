@@ -6,9 +6,10 @@ return -- add any tools you want to have installed below
       "stylua",
       "shellcheck",
       "shfmt",
+      "rust-analyzer",
     },
   },
-  opts = function(_, opts)
-    vim.list_extend(opts.ensure_installed, { "rust-analyzer", "ruff", "flake8", "pyright" })
+  opt = function(_, opts)
+    vim.list_extend(opts.ensure_installed, {})
   end,
 }
