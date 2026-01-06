@@ -11,7 +11,7 @@ return {
           settings = {
             python = {
               analysis = {
-                -- ignore = { "*" },
+                ignore = { "*" },
                 typeCheckingMode = "basic",
                 autoImportCompletion = true,
               },
@@ -22,7 +22,7 @@ return {
           init_options = {
             settings = {
               lint = {
-                enable = false,
+                -- enable = false,
               },
             },
           },

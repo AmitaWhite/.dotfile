@@ -52,3 +52,14 @@ end, { desc = "Next todo comment" })
 keymap.set("n", "[t", function()
   require("todo-comments").jump_prev()
 end, { desc = "Previous todo comment" })
+
+-- Terminal - Vertical New session
+keymap.set("n", "<leader>fh", function()
+  Snacks.terminal(nil, {
+    count = 5,
+    win = {
+      position = "right",
+      width = 0.4,
+    },
+  })
+end, { desc = "Terminal (Right Vertical)" })
