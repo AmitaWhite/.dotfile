@@ -36,6 +36,8 @@ return {
         "typescript",
         "toml",
         "xml",
+        "ninja",
+        "rst",
       })
     end,
   },

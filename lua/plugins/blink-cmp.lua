@@ -4,7 +4,6 @@ return {
     "saghen/blink.cmp",
     opts = {
       completion = {
-        -- 자동완성 목록 창 테두리
         menu = {
           border = "rounded", -- 'single', 'double', 'rounded', 'solid', 'shadow' 가능
         },

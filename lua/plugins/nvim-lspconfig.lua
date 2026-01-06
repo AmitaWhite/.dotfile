@@ -6,7 +6,29 @@ return {
     ---@class PluginLspOpts
     opts = {
       ---@type lspconfig.options
-      servers = {},
+      servers = {
+        pyright = {
+          settings = {
+            python = {
+              analysis = {
+                -- ignore = { "*" },
+                typeCheckingMode = "basic",
+                autoImportCompletion = true,
+              },
+            },
+          },
+        },
+        ruff = {
+          init_options = {
+            settings = {
+              lint = {
+                enable = false,
+              },
+            },
+          },
+        },
+      },
+
       diagnostics = {
         float = {
           border = "rounded",
