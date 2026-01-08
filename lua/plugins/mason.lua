@@ -8,6 +8,9 @@ return -- add any tools you want to have installed below
       "shfmt",
       "rust-analyzer",
     },
+    ui = {
+      border = "rounded",
+    },
   },
   opt = function(_, opts)
     vim.list_extend(opts.ensure_installed, {})
