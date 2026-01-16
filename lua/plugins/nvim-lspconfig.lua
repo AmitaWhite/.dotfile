@@ -27,6 +27,7 @@ return {
             },
           },
         },
+        postgres_lsp = {},
       },
 
       diagnostics = {

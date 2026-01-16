@@ -1,3 +1,4 @@
+-- diganostics 설정
 return {
   "folke/noice.nvim",
   event = "VeryLazy",
@@ -5,7 +6,7 @@ return {
     views = {
       hover = {
         border = {
-          style = "rounded", -- 여기를 "rounded"로 설정합니다.
+          style = "rounded",
         },
         position = { row = 2, col = 2 },
       },
