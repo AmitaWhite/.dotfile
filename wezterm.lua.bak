@@ -6,10 +6,14 @@ local config = wezterm.config_builder()
 
 -- wezterm 블러 처리
 config.window_background_opacity = 0.50
-config.macos_window_background_blur = 30
+config.macos_window_background_blur = 50
 
 -- tab bar, title bar 설정
-config.window_decorations = "RESIZE|INTEGRATED_BUTTONS"
+config.window_decorations = "RESIZE"
+config.window_frame = {
+	inactive_titlebar_bg = "transparent",
+	active_titlebar_bg = "transparent",
+}
 
 -- color scheme
 config.color_scheme = "AdventureTime"
@@ -33,8 +37,7 @@ config.colors = {
 		},
 		inactive_tab_hover = {
 			bg_color = "#3b3052",
-			fg_color = "green",
-			italic = true,
+			fg_color = "#808080",
 		},
 	},
 }
