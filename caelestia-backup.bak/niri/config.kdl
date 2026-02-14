@@ -269,6 +269,8 @@ layout {
 
 // This line starts waybar, a commonly used bar for Wayland compositors.
 spawn-at-startup "qs" "-c" "noctalia-shell"
+// **FINDME** ghostty 쉘 Quick-Terminal 기능을 쓰기 위해서 백그라운드 실행
+spawn-at-startup "ghostty" "--gtk-single-instance=true" "--initial-window=false"
 
 // To run a shell command (with variables, pipes, etc.), use spawn-sh-at-startup:
 // spawn-sh-at-startup "qs -c ~/source/qs/MyAwesomeShell"
@@ -611,6 +613,7 @@ binds {
     // Mod+Space       { switch-layout "next"; }
     // Mod+Shift+Space { switch-layout "prev"; }
 
+    // Screenshots actions
     Mod+Shift+3 { screenshot; }
     Mod+Shift+4 { screenshot-window; }
     Mod+Shift+5 { screenshot-screen; }
@@ -632,4 +635,7 @@ binds {
     // Powers off the monitors. To turn them back on, do any input like
     // moving the mouse or pressing any other key.
     Mod+Shift+P { power-off-monitors; }
+
+    // Session Menu customize
+    Mod+Shift+Q { spawn-sh "qs -c noctalia-shell ipc call sessionMenu toggle"; }
 }

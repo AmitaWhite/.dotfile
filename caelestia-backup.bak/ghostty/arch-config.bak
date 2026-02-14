@@ -1,0 +1,15 @@
+# Run `ghostty +show-config --default --docs` to view a list of
+# all available config options and their default values.
+#
+# Additionally, each config option is also explained in detail
+# on Ghostty's website, at https://ghostty.org/docs/config.
+
+theme = Gruvbox Dark
+
+
+## -- quick-terminal Setting
+keybind = global:alt+shift+s=toggle_quick_terminal
+quick-terminal-autohide = true
+quick-terminal-keyboard-interactivity = exclusive
+quick-terminal-position = top
+quick-terminal-size = 40%
