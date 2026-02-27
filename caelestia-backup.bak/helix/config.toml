@@ -3,6 +3,15 @@ theme = "gruvbox"
 [editor]
 line-number = "relative"
 true-color = true
+auto-format = true
+bufferline = "multiple"
+# end-of-line-diagnostics = "hint"
+
+[editor.soft-wrap]
+enable=true
 
 [editor.cursor-shape]
 insert = "bar"
+
+[keys.insert]
+j = { k = "normal_mode"}
