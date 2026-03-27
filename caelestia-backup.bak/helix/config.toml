@@ -1,8 +1,15 @@
-theme = "gruvbox"
+theme = "tokyonight"
 
 [editor]
 line-number = "relative"
 true-color = true
+bufferline = "multiple"
+
+[editor.soft-wrap]
+enable = true
 
 [editor.cursor-shape]
 insert = "bar"
+
+[keys.insert]
+j = { k = "normal_mode"}

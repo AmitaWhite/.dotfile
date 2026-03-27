@@ -6,7 +6,7 @@ return {
     options = {
       -- mode = "tabs",
       -- kind of styles [slant, thick, thin] or {'any','any'}
-      separator_style = { "⭐️", "🌙" },
+      separator_style = { "|", "|" },
     },
   },
 }

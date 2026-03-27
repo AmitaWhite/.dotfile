@@ -11,9 +11,10 @@
     3. curl
     4. git
     5. lazygit
-    6. fzf
+    6. fzf - find grep file
        ... else
     7. {image}magick (image render)
+    8. eza (lsd 비슷한 건데, git 상태 보기 기능 좋음)
 
 ## 환경 설정
 
@@ -23,4 +24,39 @@
 
 ---
 
-## **TODO**
+## 유용한 TUI Program
+
+- harlequin : SQLite 전용 간단한 TUI 뷰어 ,에디터
+
+```sh
+uv tool install squall-sql
+```
+
+- Shellbeats : 유튜브 음악 검색 및 다운로더 - 검색후 git 참조.
+
+```sh
+# git clone 해서 tmp 같은 임시 디렉토리로 옮겨줌
+make
+make install
+```
+
+- helix : rust로 만든 text editor
+
+- ghostty : shell 에뮬레이터, 좋음
+
+- taproom : mac homebrew TUI 관리 (검색 및 인스톨 여부 등)
+
+- silicon : Code 를 image로 잘 만들어줌! (한글을 못씀)
+
+- presenterm : 터미널 기반(md파일로) 프레젠 테이션 구성
+  - slides : 프레젠테이션 가벼운
+
+- nushell : 데이터 가공용(env, ls, json, html 보기 등) 강력한 shell
+
+- zoxide : cd를 되게 편하게 해줌
+
+- hyperfine : 벤치마크 도구
+
+- tukai : 타이핑 연습
+
+- tokei : Count 코드,파일들

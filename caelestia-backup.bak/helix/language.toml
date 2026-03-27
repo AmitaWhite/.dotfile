@@ -1,0 +1,91 @@
+# # Java
+# - brew install jdtls
+#
+# # rust
+# - brew install rust-analyzer
+#
+# # Front
+#
+# 1. 언어 서버 (LSP) 설치
+#
+# HTML, CSS, JSON, ESLint 포함
+# - brew install vscode-langservers-extracted
+#
+#  TS/JS용 (vtsls도 가능)
+# - brew install typescript-language-server 
+#
+# Tailwind CSS용 (선택)
+# - brew install tailwindcss-language-server   
+
+# 2. Biome 설치 (강력 추천: Linter + Formatter 통합 도구)
+# - brew install biome
+
+
+[[language]]
+name = "javascript"
+language-servers = ["typescript-language-server", "biome"]
+formatter = { command = "biome", args = [
+  "format",
+  "--stdin-file-path",
+  "file.js",
+] }
+auto-format = true
+
+[[language]]
+name = "typescript"
+language-servers = ["typescript-language-server", "biome"]
+formatter = { command = "biome", args = [
+  "format",
+  "--stdin-file-path",
+  "file.ts",
+] }
+auto-format = true
+
+[[language]]
+name = "jsx"
+language-servers = ["typescript-language-server", "biome"]
+formatter = { command = "biome", args = [
+  "format",
+  "--stdin-file-path",
+  "file.jsx",
+] }
+auto-format = true
+
+[[language]]
+name = "tsx"
+language-servers = ["typescript-language-server", "biome"]
+formatter = { command = "biome", args = [
+  "format",
+  "--stdin-file-path",
+  "file.tsx",
+] }
+auto-format = true
+
+
+
+
+
+
+# HTML/CSS는 기존 LSP 유지
+[[language]]
+name = "html"
+language-servers = ["vscode-html-language-server"]
+#formatter = {command = "biome" , args=["format","--stdin-file-path"]}
+formatter = {command = "prettier", args=["--parser","html"]}
+auto-format = true
+
+[[language]]
+name = "css"
+language-servers = ["vscode-css-language-server"]
+formatter = {command = "prettier", args=["--parser","html"]}
+auto-format = true
+
+
+[[language]]
+name = "sql"
+formatter = { command = "sqlfluff", args = [
+  "format",
+  "-",
+  "--dialect",
+  "oracle",
+] }

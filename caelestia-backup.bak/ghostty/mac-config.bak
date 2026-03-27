@@ -1,0 +1,8 @@
+# theme = Gruvbox Dark
+theme = TokyoNight
+macos-titlebar-style = tabs
+background-opacity = 0.85
+background-blur=true
+
+# keybind
+keybind = global:opt+space=toggle_quick_terminal
