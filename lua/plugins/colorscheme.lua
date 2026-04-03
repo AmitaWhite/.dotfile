@@ -24,7 +24,7 @@ return {
       },
       on_highlights = function(hl, c)
         -- commet 에 대한거
-        hl.Comment = { fg = "#B48EAD", italic = true }
+        -- hl.Comment = { fg = "#B48EAD", italic = true }
 
         -- theme 에서 지원하지 않는 그룹들
         for group, opts in pairs(hl) do

@@ -6,5 +6,8 @@ return {
         wo = { wrap = true },
       },
     },
+    image = {
+      enable = true,
+    },
   },
 }

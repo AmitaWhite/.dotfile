@@ -14,6 +14,7 @@
     6. fzf - find grep file
        ... else
     7. {image}magick (image render)
+       - 이거 있어야 nvim 에서 이미지,pdf 렌더링 해줌
     8. eza (lsd 비슷한 건데, git 상태 보기 기능 좋음)
 
 ## 환경 설정

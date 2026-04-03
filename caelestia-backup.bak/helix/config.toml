@@ -7,6 +7,9 @@ auto-format = true
 bufferline = "multiple"
 # end-of-line-diagnostics = "hint"
 
+[editor.lsp]
+display-inlay-hints = true
+
 [editor.soft-wrap]
 enable=true
 
