@@ -61,3 +61,10 @@ make install
 - tukai : 타이핑 연습
 
 - tokei : Count 코드,파일들
+
+- paneru : maxOS 용 niri 같은 윈도우 타일링
+  - 이거 안 쓰는 게 낫겠다 Niri 만큼 부드럽지 않음
+
+- duf : 디스크 용량 이쁘게 보여줌
+
+- orbstack : colima 보다 좀 더 나은 맥 가상화 (docker 같은 거 쓸때)
