@@ -18,6 +18,7 @@ return {
       -- 언어별 문서 표준 설정 (예: Python은 numpy 스타일)
       vim.g.doge_doc_standard_python = "numpy"
       vim.g.doge_doc_standard_javascript = "jsdoc"
+      vim.g.doge_doc_standard_java = "javadoc"
 
       -- 주석 생성 후 항목 간 이동 키 설정 (기본은 <Tab>, <S-Tab>)
       vim.g.doge_mapping_comment_jump_forward = "<Tab>"

@@ -13,6 +13,6 @@ return -- add any tools you want to have installed below
     },
   },
   opt = function(_, opts)
-    vim.list_extend(opts.ensure_installed, {})
+    vim.list_extend(opts.ensure_installed, { "lemminx" })
   end,
 }
