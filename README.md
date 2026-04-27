@@ -68,3 +68,7 @@ make install
 - duf : 디스크 용량 이쁘게 보여줌
 
 - orbstack : colima 보다 좀 더 나은 맥 가상화 (docker 같은 거 쓸때)
+
+- mole : 디스크 분석 및 정리 (CleanMyMac 같은거)
+
+- celluid (셀룰로이드) : 예전 Gnome MPV player 인데, 리눅스에서 쓸 용도
