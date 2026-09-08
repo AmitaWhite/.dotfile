@@ -1,28 +1,25 @@
+-- 함수 · 클래스 docstring 자동 생성
 return {
-  {
-    "kkoomen/vim-doge",
-    -- 플러그인 설치 후 자동으로 바이너리 설치 (최초 1회 실행)
-    build = ":call doge#install()",
-    -- 특정 명령어 사용 시에만 로드되도록 지연 로딩(Lazy Load) 설정
-    cmd = { "DogeGenerate", "DogeCreateDocStandard" },
-    -- 특정 키를 누를 때 플러그인 로드 및 실행
-    ft = { "python", "javascript", "typescript", "cpp", "c", "rust", "go", "java" },
-    keys = {
-      { "<leader>cD", "<cmd>DogeGenerate<cr>", desc = "Document Generation (Doge)" },
-    },
-    config = function()
-      -- Vimscript 전역 변수 설정을 통해 doge 옵션 제어
-      -- 기본 매핑 비활성화 (커스텀 매핑 사용 시)
-      vim.g.doge_enable_mappings = 0
-
-      -- 언어별 문서 표준 설정 (예: Python은 numpy 스타일)
-      vim.g.doge_doc_standard_python = "numpy"
-      vim.g.doge_doc_standard_javascript = "jsdoc"
-      vim.g.doge_doc_standard_java = "javadoc"
-
-      -- 주석 생성 후 항목 간 이동 키 설정 (기본은 <Tab>, <S-Tab>)
-      vim.g.doge_mapping_comment_jump_forward = "<Tab>"
-      vim.g.doge_mapping_comment_jump_backward = "<S-Tab>"
-    end,
+  "kkoomen/vim-doge",
+  -- 플러그인 설치 후 바이너리 설치 (최초 1회)
+  build = ":call doge#install()",
+  -- 해당 filetype 을 열 때 로드 (cmd 트리거는 ft 보다 늦게 오므로 불필요)
+  ft = { "python", "javascript", "typescript", "cpp", "c", "rust", "go", "java" },
+  keys = {
+    { "<leader>cD", "<cmd>DogeGenerate<cr>", desc = "Document Generation (Doge)" },
   },
+  -- vim-doge 는 vimscript 플러그인이라 plugin/doge.vim 이 로드되는 시점에 g:doge_* 를 읽는다.
+  -- 그래서 config(로드 후)가 아니라 init(로드 전)에서 설정해야 한다.
+  -- 특히 doge_enable_mappings = 0 을 config 에서 주면 이미 <leader>d 기본 매핑이 생성된 뒤라
+  -- 무효가 되고, 그 <leader>d 가 LazyVim DAP 그룹(<leader>d*) 전체와 충돌한다.
+  init = function()
+    vim.g.doge_enable_mappings = 0
+    -- 언어별 문서 표준
+    vim.g.doge_doc_standard_python = "numpy"
+    vim.g.doge_doc_standard_javascript = "jsdoc"
+    vim.g.doge_doc_standard_java = "javadoc"
+    -- 생성된 주석 항목 간 이동
+    vim.g.doge_mapping_comment_jump_forward = "<Tab>"
+    vim.g.doge_mapping_comment_jump_backward = "<S-Tab>"
+  end,
 }

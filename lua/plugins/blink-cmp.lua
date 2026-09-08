@@ -1,25 +1,7 @@
---cmp 는 complementaion(자동완성) 기능
+-- cmp 는 completion(자동완성) 기능
+-- 메뉴 / 문서 / signature 창 테두리는 vim.o.winborder ("rounded") 를 자동으로 따라감
+-- (blink.cmp 는 border = nil 이면 nvim 0.11+ 의 winborder 를 사용, config/options.lua 참고)
 return {
-  {
-    "saghen/blink.cmp",
-    opts = {
-      completion = {
-        menu = {
-          border = "rounded", -- 'single', 'double', 'rounded', 'solid', 'shadow' 가능
-        },
-        -- 함수 설명 등 문서 창 테두리
-        documentation = {
-          window = {
-            border = "rounded",
-          },
-        },
-      },
-      -- (선택 사항) 함수 매개변수 도움말(signature) 창 테두리
-      signature = {
-        window = {
-          border = "rounded",
-        },
-      },
-    },
-  },
+  "saghen/blink.cmp",
+  opts = {},
 }

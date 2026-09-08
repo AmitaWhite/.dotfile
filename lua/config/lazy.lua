@@ -17,20 +17,12 @@ vim.opt.rtp:prepend(lazypath)
 
 require("lazy").setup({
   spec = {
-    -- add LazyVim and import its plugins
+    -- LazyVim 본체 + extras. extras 는 전부 lazyvim.json 에서 관리한다 (:LazyExtras)
+    -- 여기에 { import = "lazyvim.plugins.extras.*" } 를 직접 쓰면 :LazyExtras UI 에 안 보이고 끌 수도 없다
     { "LazyVim/LazyVim", import = "lazyvim.plugins" },
 
-    -- import extras
-    { import = "lazyvim.plugins.extras.lang.typescript" },
-    { import = "lazyvim.plugins.extras.lang.json" },
-    { import = "lazyvim.plugins.extras.lang.toml" },
-    { import = "lazyvim.plugins.extras.lang.python" },
-    { import = "lazyvim.plugins.extras.lang.clangd" },
-
-    -- import/override with your plugins
+    -- 내 플러그인 오버라이드 (lua/plugins/*.lua)
     { import = "plugins" },
-    -- 언어별 lsp 세부 설정이 있다면
-    { import = "lsp" },
   },
   defaults = {
     -- By default, only LazyVim plugins will be lazy-loaded. Your custom plugins will load during startup.

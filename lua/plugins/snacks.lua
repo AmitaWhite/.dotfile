@@ -7,7 +7,7 @@ return {
       },
     },
     image = {
-      enable = true,
+      enabled = true,
     },
   },
 }

@@ -1,0 +1,652 @@
+<title>내 Neovim 사용 가이드</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+  /* ---- tokyonight day (light) ---- */
+  :root {
+    --bg: #e1e2e7;
+    --panel: #d5d6db;
+    --panel-2: #c8c9ce;
+    --line: #b4b5b9;
+    --fg: #3760bf;
+    --fg-strong: #2a4a9c;
+    --muted: #6172b0;
+    --accent: #2e7de9;
+    --accent-soft: rgba(46, 125, 233, 0.12);
+    --violet: #9854f1;
+    --ok: #587539;
+    --ok-soft: rgba(88, 117, 57, 0.14);
+    --warn: #b15c00;
+    --warn-soft: rgba(177, 92, 0, 0.12);
+    --kbd-bg: #eef0f5;
+    --kbd-line: #a9b1d6;
+    --code-bg: #d0d2da;
+    --font-body: "IBM Plex Sans KR", "Apple SD Gothic Neo", "Noto Sans KR", "Pretendard", system-ui, sans-serif;
+    --font-mono: "JetBrains Mono", "JetBrainsMono Nerd Font", "SF Mono", Menlo, Consolas, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #222436;
+      --panel: #1e2030;
+      --panel-2: #2f334d;
+      --line: #3b4261;
+      --fg: #c8d3f5;
+      --fg-strong: #e2e8ff;
+      --muted: #828bb8;
+      --accent: #82aaff;
+      --accent-soft: rgba(130, 170, 255, 0.14);
+      --violet: #c099ff;
+      --ok: #c3e88d;
+      --ok-soft: rgba(195, 232, 141, 0.14);
+      --warn: #ff966c;
+      --warn-soft: rgba(255, 150, 108, 0.14);
+      --kbd-bg: #2f334d;
+      --kbd-line: #545c7e;
+      --code-bg: #1b1d2b;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #222436;
+    --panel: #1e2030;
+    --panel-2: #2f334d;
+    --line: #3b4261;
+    --fg: #c8d3f5;
+    --fg-strong: #e2e8ff;
+    --muted: #828bb8;
+    --accent: #82aaff;
+    --accent-soft: rgba(130, 170, 255, 0.14);
+    --violet: #c099ff;
+    --ok: #c3e88d;
+    --ok-soft: rgba(195, 232, 141, 0.14);
+    --warn: #ff966c;
+    --warn-soft: rgba(255, 150, 108, 0.14);
+    --kbd-bg: #2f334d;
+    --kbd-line: #545c7e;
+    --code-bg: #1b1d2b;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--fg);
+    font-family: var(--font-body);
+    font-size: 15.5px;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: var(--accent); }
+  h1, h2, h3 { color: var(--fg-strong); text-wrap: balance; line-height: 1.25; margin: 0; }
+  h1 { font-size: 1.9rem; font-weight: 700; letter-spacing: -0.01em; }
+  h2 { font-size: 1.35rem; font-weight: 700; }
+  h3 { font-size: 1rem; font-weight: 600; }
+  p { margin: 0; }
+  code, kbd, pre { font-family: var(--font-mono); }
+  code { font-size: 0.88em; background: var(--code-bg); padding: 0.1em 0.4em; border-radius: 4px; }
+  pre { background: var(--code-bg); padding: 0.85rem 1rem; border-radius: 6px; overflow-x: auto; font-size: 0.85rem; line-height: 1.55; margin: 0; }
+  pre code { background: none; padding: 0; font-size: inherit; }
+  kbd {
+    display: inline-block;
+    font-size: 0.82em;
+    font-weight: 600;
+    color: var(--fg-strong);
+    background: var(--kbd-bg);
+    border: 1px solid var(--kbd-line);
+    border-bottom-width: 2px;
+    border-radius: 5px;
+    padding: 0.05em 0.45em;
+    white-space: nowrap;
+    line-height: 1.5;
+  }
+  .eyebrow { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+
+  /* ---- layout ---- */
+  .shell { display: grid; grid-template-columns: 250px minmax(0, 1fr); gap: 2.5rem; max-width: 1100px; margin: 0 auto; padding: 2rem 1.5rem 5rem; }
+  nav.toc { position: sticky; top: 1.25rem; align-self: start; display: flex; flex-direction: column; gap: 0.15rem; }
+  nav.toc .eyebrow { margin-bottom: 0.4rem; }
+  nav.toc a { display: grid; grid-template-columns: 1.4rem 1fr auto; align-items: baseline; gap: 0.4rem; color: var(--fg); text-decoration: none; padding: 0.3rem 0.5rem; border-radius: 6px; font-size: 0.9rem; }
+  nav.toc a:hover { background: var(--accent-soft); }
+  nav.toc a .n { font-family: var(--font-mono); font-size: 0.75rem; color: var(--muted); }
+  nav.toc a .p { font-family: var(--font-mono); font-size: 0.72rem; color: var(--muted); font-variant-numeric: tabular-nums; }
+  nav.toc a .p.done { color: var(--ok); }
+  nav.toc .divider { border-top: 1px solid var(--line); margin: 0.5rem 0.5rem; }
+  main { max-width: 68ch; min-width: 0; }
+
+  header.hero { margin-bottom: 2.25rem; display: flex; flex-direction: column; gap: 0.75rem; }
+  header.hero p.lead { color: var(--muted); max-width: 60ch; }
+  .legend { display: flex; flex-wrap: wrap; gap: 0.5rem 1.2rem; font-size: 0.85rem; color: var(--muted); padding: 0.75rem 1rem; border: 1px solid var(--line); border-radius: 8px; background: var(--panel); }
+  .legend span { display: inline-flex; gap: 0.4rem; align-items: baseline; }
+
+  section.wf { padding: 2rem 0; border-top: 1px solid var(--line); scroll-margin-top: 1rem; display: flex; flex-direction: column; gap: 1.1rem; }
+  section.wf .head { display: flex; align-items: baseline; gap: 0.7rem; flex-wrap: wrap; }
+  section.wf .head .n { font-family: var(--font-mono); color: var(--accent); font-size: 0.85rem; }
+  section.wf .head .p { margin-left: auto; font-family: var(--font-mono); font-size: 0.78rem; color: var(--muted); font-variant-numeric: tabular-nums; }
+  section.wf .head .p.done { color: var(--ok); }
+  .when { border-left: 3px solid var(--accent); padding: 0.15rem 0 0.15rem 0.9rem; color: var(--fg); }
+  .when b { color: var(--fg-strong); }
+
+  table.keys { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+  table.keys th { text-align: left; font-weight: 600; color: var(--muted); font-size: 0.75rem; letter-spacing: 0.06em; text-transform: uppercase; padding: 0.35rem 0.5rem; border-bottom: 1px solid var(--line); }
+  table.keys td { padding: 0.4rem 0.5rem; border-bottom: 1px solid var(--line); vertical-align: top; }
+  table.keys td:first-child { white-space: nowrap; width: 11rem; }
+  .tablewrap { overflow-x: auto; }
+
+  .try { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 1rem 1.15rem 1.1rem; display: flex; flex-direction: column; gap: 0.6rem; }
+  .try h3 { display: flex; gap: 0.5rem; align-items: baseline; }
+  .try h3 .eyebrow { color: var(--accent); }
+  ol.steps { margin: 0; padding: 0; list-style: none; counter-reset: step; display: flex; flex-direction: column; gap: 0.35rem; }
+  ol.steps li { counter-increment: step; }
+  ol.steps label { display: grid; grid-template-columns: 1.5rem 1.15rem 1fr; gap: 0.45rem; align-items: start; cursor: pointer; padding: 0.3rem 0.4rem; border-radius: 6px; }
+  ol.steps label:hover { background: var(--accent-soft); }
+  ol.steps label::before { content: counter(step); font-family: var(--font-mono); font-size: 0.78rem; color: var(--muted); padding-top: 0.2rem; }
+  ol.steps input { margin: 0.35rem 0 0; accent-color: var(--accent); width: 1rem; height: 1rem; }
+  ol.steps input:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  ol.steps label span { transition: color 0.15s; }
+  ol.steps input:checked + span { color: var(--muted); text-decoration: line-through; text-decoration-color: var(--line); }
+  .expect { color: var(--muted); font-size: 0.88em; }
+
+  .trap { display: flex; gap: 0.7rem; padding: 0.7rem 0.95rem; border-radius: 8px; background: var(--warn-soft); border: 1px solid transparent; font-size: 0.92rem; }
+  .trap::before { content: "!"; font-family: var(--font-mono); font-weight: 600; color: var(--warn); }
+  .tip { display: flex; gap: 0.7rem; padding: 0.7rem 0.95rem; border-radius: 8px; background: var(--ok-soft); font-size: 0.92rem; }
+  .tip::before { content: "→"; font-family: var(--font-mono); font-weight: 600; color: var(--ok); }
+  .path { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 0.6rem; }
+  .path a { display: flex; flex-direction: column; gap: 0.15rem; padding: 0.7rem 0.85rem; border: 1px solid var(--line); border-radius: 8px; text-decoration: none; color: var(--fg); background: var(--panel); }
+  .path a:hover { border-color: var(--accent); }
+  .path a .eyebrow { color: var(--accent); }
+  .path a small { color: var(--muted); font-size: 0.8rem; }
+  footer { margin-top: 3rem; padding-top: 1.25rem; border-top: 1px solid var(--line); color: var(--muted); font-size: 0.85rem; display: flex; flex-direction: column; gap: 0.4rem; }
+  footer button { font: inherit; font-size: 0.85rem; color: var(--accent); background: none; border: 1px solid var(--line); border-radius: 6px; padding: 0.3rem 0.7rem; cursor: pointer; align-self: flex-start; }
+  footer button:hover { background: var(--accent-soft); }
+
+  @media (max-width: 860px) {
+    .shell { grid-template-columns: 1fr; gap: 1.5rem; padding: 1.25rem 1rem 4rem; }
+    nav.toc { position: static; flex-direction: row; flex-wrap: wrap; gap: 0.25rem; }
+    nav.toc .eyebrow, nav.toc .divider { display: none; }
+    nav.toc a { grid-template-columns: auto auto; font-size: 0.82rem; padding: 0.25rem 0.55rem; border: 1px solid var(--line); }
+    nav.toc a .n { display: none; }
+    table.keys td:first-child { width: auto; }
+  }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+
+<div class="shell">
+<nav class="toc" aria-label="워크플로 목차">
+  <span class="eyebrow">매일 쓰는 것</span>
+  <a href="#s1"><span class="n">01</span>시작하기<span class="p" data-p="s1"></span></a>
+  <a href="#s2"><span class="n">02</span>파일 · 버퍼 탐색<span class="p" data-p="s2"></span></a>
+  <a href="#s3"><span class="n">03</span>검색 · 치환 · 점프<span class="p" data-p="s3"></span></a>
+  <a href="#s4"><span class="n">04</span>편집 기술<span class="p" data-p="s4"></span></a>
+  <a href="#s5"><span class="n">05</span>코드 이해 (LSP)<span class="p" data-p="s5"></span></a>
+  <a href="#s6"><span class="n">06</span>진단 · 문제 목록<span class="p" data-p="s6"></span></a>
+  <a href="#s7"><span class="n">07</span>Git<span class="p" data-p="s7"></span></a>
+  <a href="#s8"><span class="n">08</span>터미널 · 창<span class="p" data-p="s8"></span></a>
+  <div class="divider"></div>
+  <span class="eyebrow">필요할 때</span>
+  <a href="#s9"><span class="n">09</span>테스트 (neotest)<span class="p" data-p="s9"></span></a>
+  <a href="#s10"><span class="n">10</span>디버깅 (DAP)<span class="p" data-p="s10"></span></a>
+  <a href="#s11"><span class="n">11</span>데이터베이스<span class="p" data-p="s11"></span></a>
+  <a href="#s12"><span class="n">12</span>마크다운 · 문서<span class="p" data-p="s12"></span></a>
+  <a href="#s13"><span class="n">13</span>UI 토글 · 세션<span class="p" data-p="s13"></span></a>
+</nav>
+
+<main>
+<header class="hero">
+  <span class="eyebrow">LazyVim · ~/.config/nvim</span>
+  <h1>내 Neovim 사용 가이드</h1>
+  <p class="lead">키 목록이 아니라 <b>상황</b>에서 출발한다. 각 워크플로는 "언제 쓰나 → 핵심 키 → 직접 해보기" 순서다. 해보기의 체크는 이 브라우저에 저장되니 nvim 을 옆에 띄우고 하나씩 지워 나가면 된다.</p>
+  <div class="legend">
+    <span><kbd>&lt;leader&gt;</kbd> = <kbd>Space</kbd></span>
+    <span><kbd>&lt;C-x&gt;</kbd> = Ctrl+x</span>
+    <span><kbd>&lt;M-x&gt;</kbd> = Option/Alt+x</span>
+    <span>키를 누르고 잠깐 기다리면 which-key 가 다음 후보를 보여준다</span>
+  </div>
+  <div class="path">
+    <a href="#s1"><span class="eyebrow">첫날</span><b>01 → 02 → 03</b><small>나가기·찾기·이동만 되면 산다</small></a>
+    <a href="#s4"><span class="eyebrow">첫 주</span><b>04 → 05 → 06</b><small>편집·LSP·진단 — 코드 작업의 8할</small></a>
+    <a href="#s7"><span class="eyebrow">둘째 주</span><b>07 → 08 → 13</b><small>Git·터미널·UI 를 nvim 안에서</small></a>
+    <a href="#s9"><span class="eyebrow">프로젝트 생기면</span><b>09 → 10 → 11</b><small>테스트·디버깅·DB</small></a>
+  </div>
+</header>
+
+<!-- ============================================================ -->
+<section class="wf" id="s1">
+  <div class="head"><span class="n">01</span><h2>시작하기</h2><span class="p" data-p="s1"></span></div>
+  <p class="when"><b>막혔을 때 빠져나오는 법</b>부터. 이 네 가지만 알면 어디서든 복구된다.</p>
+  <div class="tablewrap"><table class="keys">
+    <tr><th>키</th><th>동작</th></tr>
+    <tr><td><kbd>&lt;leader&gt;qq</kbd></td><td>전부 저장 확인 후 종료. <code>:q</code> 는 창 하나만 닫아서 탐색기가 남으면 안 꺼진다</td></tr>
+    <tr><td><kbd>jk</kbd> / <kbd>Esc</kbd></td><td>insert → normal. <kbd>Esc</kbd> 는 검색 하이라이트도 지운다</td></tr>
+    <tr><td><kbd>&lt;leader&gt;?</kbd></td><td>지금 버퍼에서 쓸 수 있는 키맵 전부 (LSP 붙은 뒤 늘어난다)</td></tr>
+    <tr><td><kbd>&lt;leader&gt;sk</kbd></td><td>키맵을 설명으로 검색 — "rename" 치면 <kbd>&lt;leader&gt;cr</kbd> 이 나온다</td></tr>
+    <tr><td><kbd>&lt;leader&gt;sh</kbd></td><td>도움말 검색 (<code>:help</code> 를 picker 로)</td></tr>
+    <tr><td><kbd>&lt;C-s&gt;</kbd></td><td>저장 (insert 모드에서도)</td></tr>
+    <tr><td><kbd>&lt;leader&gt;l</kbd> · <kbd>&lt;leader&gt;cm</kbd></td><td>Lazy(플러그인) · Mason(LSP 설치) 화면</td></tr>
+  </table></div>
+  <div class="try">
+    <h3><span class="eyebrow">해보기</span>복구 루틴 손에 익히기</h3>
+    <ol class="steps">
+      <li><label><input type="checkbox" data-id="s1-1"><span>터미널에서 <code>nvim</code> 실행 → 대시보드에서 <kbd>&lt;leader&gt;</kbd> 만 누르고 1초 기다려 which-key 목록 보기</span></label></li>
+      <li><label><input type="checkbox" data-id="s1-2"><span><kbd>&lt;leader&gt;e</kbd> 로 탐색기를 열고 <code>:q</code> 입력 — <span class="expect">탐색기만 남고 nvim 이 안 꺼지는 걸 확인</span></span></label></li>
+      <li><label><input type="checkbox" data-id="s1-3"><span><kbd>&lt;leader&gt;qq</kbd> 로 종료</span></label></li>
+      <li><label><input type="checkbox" data-id="s1-4"><span>다시 열어 <kbd>&lt;leader&gt;sk</kbd> → <code>format</code> 입력 → 포맷 키가 무엇인지 확인</span></label></li>
+      <li><label><input type="checkbox" data-id="s1-5"><span><code>:checkhealth lazyvim</code> — 전부 OK 인지. 아니면 SETUP.md §2</span></label></li>
+    </ol>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<section class="wf" id="s2">
+  <div class="head"><span class="n">02</span><h2>파일 · 버퍼 탐색</h2><span class="p" data-p="s2"></span></div>
+  <p class="when"><b>파일을 열 때 탐색기를 먼저 열지 않는다.</b> 이름을 알면 picker(<kbd>&lt;leader&gt;&lt;space&gt;</kbd>), 구조를 봐야 하면 탐색기(<kbd>&lt;leader&gt;e</kbd>), 방금 봤던 파일이면 최근(<kbd>&lt;leader&gt;fr</kbd>).</p>
+  <div class="tablewrap"><table class="keys">
+    <tr><th>키</th><th>동작</th></tr>
+    <tr><td><kbd>&lt;leader&gt;&lt;space&gt;</kbd> / <kbd>ff</kbd></td><td>프로젝트 루트 기준 파일 찾기 (fuzzy). <kbd>fF</kbd> 는 현재 디렉토리 기준</td></tr>
+    <tr><td><kbd>&lt;leader&gt;fg</kbd></td><td>git 이 추적하는 파일만</td></tr>
+    <tr><td><kbd>&lt;leader&gt;fr</kbd> / <kbd>fR</kbd></td><td>최근 파일 (전체 / cwd)</td></tr>
+    <tr><td><kbd>&lt;leader&gt;e</kbd> / <kbd>E</kbd></td><td>탐색기 (루트 / cwd). 안에서 <kbd>?</kbd> 로 키 목록. <kbd>a</kbd> 새 파일, <kbd>d</kbd> 삭제, <kbd>r</kbd> 이름변경, <kbd>y</kbd>/<kbd>p</kbd> 복사·붙여넣기, <kbd>H</kbd> 숨김 토글</td></tr>
+    <tr><td><kbd>&lt;leader&gt;,</kbd> / <kbd>fb</kbd></td><td>열린 버퍼 목록</td></tr>
+    <tr><td><kbd>H</kbd> / <kbd>L</kbd></td><td>이전 / 다음 버퍼 (상단 탭줄 순서)</td></tr>
+    <tr><td><kbd>&lt;leader&gt;`</kbd></td><td>직전 버퍼로 토글</td></tr>
+    <tr><td><kbd>&lt;leader&gt;bd</kbd> / <kbd>bo</kbd></td><td>현재 버퍼 닫기 / 나머지 전부 닫기 (창은 유지)</td></tr>
+    <tr><td><kbd>&lt;leader&gt;bp</kbd> / <kbd>bP</kbd></td><td>버퍼 고정 / 고정 안 된 것 전부 닫기</td></tr>
+    <tr><td><kbd>&lt;leader&gt;fc</kbd></td><td>이 설정 저장소의 파일 찾기</td></tr>
+    <tr><td><kbd>&lt;leader&gt;fp</kbd></td><td>프로젝트 목록</td></tr>
+    <tr><td><kbd>&lt;leader&gt;fn</kbd></td><td>새 파일</td></tr>
+  </table></div>
+  <div class="try">
+    <h3><span class="eyebrow">해보기</span>탐색기 없이 파일 옮겨 다니기</h3>
+    <ol class="steps">
+      <li><label><input type="checkbox" data-id="s2-1"><span>이 저장소에서 <code>nvim</code> → <kbd>&lt;leader&gt;&lt;space&gt;</kbd> → <code>lsp</code> 입력 → Enter 로 <code>lua/plugins/lsp.lua</code> 열기</span></label></li>
+      <li><label><input type="checkbox" data-id="s2-2"><span><kbd>&lt;leader&gt;&lt;space&gt;</kbd> → <code>keym</code> → keymaps.lua 열기. 이제 <kbd>H</kbd> <kbd>L</kbd> 로 둘 사이 왕복</span></label></li>
+      <li><label><input type="checkbox" data-id="s2-3"><span><kbd>&lt;leader&gt;,</kbd> 로 버퍼 목록에서 고르기</span></label></li>
+      <li><label><input type="checkbox" data-id="s2-4"><span><kbd>&lt;leader&gt;e</kbd> → <kbd>?</kbd> 로 탐색기 키 훑기 → <kbd>a</kbd> 로 <code>tmp.txt</code> 만들고 <kbd>d</kbd> 로 지우기</span></label></li>
+      <li><label><input type="checkbox" data-id="s2-5"><span><kbd>&lt;leader&gt;bo</kbd> 로 현재 것 빼고 전부 닫기</span></label></li>
+    </ol>
+  </div>
+  <p class="tip">picker 안에서는 <kbd>&lt;C-j&gt;</kbd>/<kbd>&lt;C-k&gt;</kbd> 이동, <kbd>&lt;C-v&gt;</kbd> 세로분할로 열기, <kbd>&lt;C-q&gt;</kbd> 결과 전부를 quickfix 로 보내기.</p>
+</section>
+
+<!-- ============================================================ -->
+<section class="wf" id="s3">
+  <div class="head"><span class="n">03</span><h2>검색 · 치환 · 점프</h2><span class="p" data-p="s3"></span></div>
+  <p class="when"><b>"이 문자열 어디 있지"</b>는 <kbd>&lt;leader&gt;/</kbd>, <b>"커서 아래 단어 어디서 쓰지"</b>는 <kbd>&lt;leader&gt;sw</kbd>, <b>화면 안 저기로 가고 싶다</b>는 <kbd>s</kbd>(flash). 여러 파일 치환은 <kbd>&lt;leader&gt;sr</kbd>.</p>
+  <div class="tablewrap"><table class="keys">
+    <tr><th>키</th><th>동작</th></tr>
+    <tr><td><kbd>&lt;leader&gt;/</kbd> / <kbd>sg</kbd></td><td>프로젝트 전체 grep (ripgrep). <kbd>sG</kbd> 는 cwd</td></tr>
+    <tr><td><kbd>&lt;leader&gt;sw</kbd></td><td>커서 단어(또는 선택)로 grep</td></tr>
+    <tr><td><kbd>&lt;leader&gt;sb</kbd></td><td>현재 버퍼 줄 검색 — 긴 파일에서 <code>/</code> 대신</td></tr>
+    <tr><td><kbd>&lt;leader&gt;sB</kbd></td><td>열린 버퍼들만 grep</td></tr>
+    <tr><td><kbd>&lt;leader&gt;sr</kbd></td><td>검색·치환 (grug-far). 정규식, 파일 필터, 미리보기 후 일괄 적용</td></tr>
+    <tr><td><kbd>&lt;leader&gt;sR</kbd></td><td>직전 picker 다시 열기</td></tr>
+    <tr><td><kbd>s</kbd> + 두 글자</td><td>flash — 화면 안 아무 곳으로 점프. 라벨 글자 누르면 이동</td></tr>
+    <tr><td><kbd>S</kbd></td><td>flash treesitter — 함수/블록 단위 선택</td></tr>
+    <tr><td><kbd>&lt;leader&gt;sj</kbd> / <kbd>sm</kbd></td><td>점프 목록 / 마크</td></tr>
+    <tr><td><kbd>&lt;leader&gt;s"</kbd></td><td>레지스터(복사 이력) 보고 붙여넣기</td></tr>
+    <tr><td><kbd>&lt;leader&gt;su</kbd></td><td>undo 트리 — 되돌리기 이력 분기까지</td></tr>
+    <tr><td><kbd>&lt;leader&gt;ss</kbd></td><td>현재 파일 심볼(함수·클래스) 로 점프 (LSP)</td></tr>
+  </table></div>
+  <div class="try">
+    <h3><span class="eyebrow">해보기</span>grep → quickfix → 일괄 치환</h3>
+    <ol class="steps">
+      <li><label><input type="checkbox" data-id="s3-1"><span><kbd>&lt;leader&gt;/</kbd> → <code>winborder</code> → 결과에서 Enter 로 이동</span></label></li>
+      <li><label><input type="checkbox" data-id="s3-2"><span>커서를 <code>rounded</code> 위에 두고 <kbd>&lt;leader&gt;sw</kbd> — <span class="expect">같은 단어 쓰는 곳 전부</span></span></label></li>
+      <li><label><input type="checkbox" data-id="s3-3"><span><kbd>s</kbd> 누르고 화면에 보이는 아무 단어의 앞 두 글자 입력 → 뜬 라벨 글자 누르기</span></label></li>
+      <li><label><input type="checkbox" data-id="s3-4"><span><kbd>&lt;leader&gt;sr</kbd> → Search 에 <code>foo</code>, Replace 에 <code>bar</code>, Files filter 에 <code>*.md</code> → 미리보기만 보고 <kbd>&lt;leader&gt;qq</kbd>? 아니, 그 창에서 <kbd>q</kbd> 로 닫기 (적용 안 함)</span></label></li>
+      <li><label><input type="checkbox" data-id="s3-5"><span>아무거나 몇 번 수정·undo 한 뒤 <kbd>&lt;leader&gt;su</kbd> 로 트리 보기</span></label></li>
+    </ol>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<section class="wf" id="s4">
+  <div class="head"><span class="n">04</span><h2>편집 기술</h2><span class="p" data-p="s4"></span></div>
+  <p class="when"><b>손으로 타이핑하는 양을 줄이는 도구들.</b> 텍스트 오브젝트(<kbd>ai</kbd> <kbd>ii</kbd> …), 감싸기(<kbd>gsa</kbd>), 주석(<kbd>gcc</kbd>), 줄 이동(<kbd>&lt;M-j&gt;</kbd>), 자동완성.</p>
+  <div class="tablewrap"><table class="keys">
+    <tr><th>키</th><th>동작</th></tr>
+    <tr><td><kbd>gcc</kbd> / <kbd>gc</kbd>+범위</td><td>주석 토글 (언어별 주석 기호 자동). <kbd>gco</kbd>/<kbd>gcO</kbd> 아래/위에 주석 줄 추가</td></tr>
+    <tr><td><kbd>&lt;M-j&gt;</kbd> / <kbd>&lt;M-k&gt;</kbd></td><td>줄(또는 선택) 위아래로 이동</td></tr>
+    <tr><td><kbd>gsa</kbd> + 오브젝트 + 문자</td><td>감싸기 추가. <code>gsaiw"</code> = 단어를 따옴표로. <kbd>gsd"</kbd> 삭제, <kbd>gsr"'</kbd> 교체</td></tr>
+    <tr><td><kbd>ai</kbd> / <kbd>ii</kbd></td><td>들여쓰기 블록 오브젝트. <code>dii</code> = 같은 들여쓰기 블록 삭제</td></tr>
+    <tr><td><kbd>af</kbd> / <kbd>if</kbd> · <kbd>ac</kbd> / <kbd>ic</kbd> · <kbd>aa</kbd> / <kbd>ia</kbd></td><td>함수 / 클래스 / 인자 오브젝트 (treesitter). <code>vaf</code> 함수 전체 선택, <code>cia</code> 인자 하나 바꾸기</td></tr>
+    <tr><td><kbd>an</kbd> / <kbd>in</kbd> · <kbd>al</kbd> / <kbd>il</kbd></td><td>다음 / 이전 오브젝트. <code>cin"</code> = 다음 따옴표 안 내용 바꾸기</td></tr>
+    <tr><td><kbd>&lt;C-space&gt;</kbd></td><td>선택을 문법 단위로 점점 넓히기 (treesitter incremental)</td></tr>
+    <tr><td><kbd>&lt;CR&gt;</kbd> · <kbd>&lt;C-n&gt;</kbd>/<kbd>&lt;C-p&gt;</kbd></td><td>자동완성 수락 · 후보 이동. <kbd>&lt;C-space&gt;</kbd> 문서 보기</td></tr>
+    <tr><td><kbd>&lt;Tab&gt;</kbd> / <kbd>&lt;S-Tab&gt;</kbd></td><td>스니펫 다음/이전 자리로</td></tr>
+    <tr><td><kbd>&lt;leader&gt;cf</kbd></td><td>포맷 (저장 시 자동 포맷도 켜져 있음, <kbd>&lt;leader&gt;uf</kbd> 로 토글)</td></tr>
+    <tr><td><kbd>&lt;leader&gt;.</kbd></td><td>스크래치 버퍼 — 메모나 코드 조각 실험용, 파일 안 만들어도 유지됨</td></tr>
+  </table></div>
+  <div class="try">
+    <h3><span class="eyebrow">해보기</span>오브젝트로 편집하기</h3>
+    <ol class="steps">
+      <li><label><input type="checkbox" data-id="s4-1"><span><kbd>&lt;leader&gt;.</kbd> 스크래치를 열고 <code>:set ft=python</code> 후 함수 하나 붙여넣기 (인자 2개 이상)</span></label></li>
+      <li><label><input type="checkbox" data-id="s4-2"><span>함수 안 아무 줄에서 <kbd>vaf</kbd> — <span class="expect">함수 전체 선택</span> → <kbd>Esc</kbd></span></label></li>
+      <li><label><input type="checkbox" data-id="s4-3"><span>인자 위에서 <kbd>cia</kbd> → 새 이름 입력 → <kbd>jk</kbd></span></label></li>
+      <li><label><input type="checkbox" data-id="s4-4"><span>단어 위에서 <kbd>gsaiw"</kbd> → 따옴표로 감싸짐 → <kbd>gsd"</kbd> 로 다시 제거</span></label></li>
+      <li><label><input type="checkbox" data-id="s4-5"><span><kbd>gcc</kbd> 주석 토글 두 번, <kbd>&lt;M-j&gt;</kbd> 로 줄 옮기기</span></label></li>
+      <li><label><input type="checkbox" data-id="s4-6"><span>insert 에서 <code>pri</code> 까지 치고 완성 목록 보기 → <kbd>&lt;CR&gt;</kbd> 수락</span></label></li>
+    </ol>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<section class="wf" id="s5">
+  <div class="head"><span class="n">05</span><h2>코드 이해 (LSP)</h2><span class="p" data-p="s5"></span></div>
+  <p class="when"><b>"이거 뭐지 / 어디서 정의됐지 / 누가 쓰지 / 이름 바꾸고 싶다"</b>. 언어 서버가 붙어야 동작한다 — 상태줄에 서버 이름이 보이거나 <code>:LspInfo</code> 로 확인. 아래 키는 <b>LSP 가 붙은 버퍼에서만</b> 생긴다.</p>
+  <div class="tablewrap"><table class="keys">
+    <tr><th>키</th><th>동작</th></tr>
+    <tr><td><kbd>K</kbd></td><td>hover — 타입, 문서. 한 번 더 누르면 창 안으로 들어가 스크롤</td></tr>
+    <tr><td><kbd>gd</kbd> / <kbd>gD</kbd></td><td>정의 / 선언으로. 돌아오기는 <kbd>&lt;C-o&gt;</kbd></td></tr>
+    <tr><td><kbd>gr</kbd></td><td>참조 목록 (picker)</td></tr>
+    <tr><td><kbd>gI</kbd> / <kbd>gy</kbd></td><td>구현 / 타입 정의</td></tr>
+    <tr><td><kbd>gK</kbd></td><td>시그니처 도움말 (insert 에서는 <kbd>&lt;C-k&gt;</kbd>)</td></tr>
+    <tr><td><kbd>&lt;leader&gt;ca</kbd></td><td>코드 액션 — import 추가, 자동 수정, 리팩터 제안</td></tr>
+    <tr><td><kbd>&lt;leader&gt;cr</kbd></td><td>심볼 이름 바꾸기 (프로젝트 전체)</td></tr>
+    <tr><td><kbd>&lt;leader&gt;cR</kbd></td><td>파일 이름 바꾸기 + import 경로 갱신 (TS)</td></tr>
+    <tr><td><kbd>&lt;leader&gt;cs</kbd> / <kbd>ss</kbd></td><td>심볼 아웃라인 (Trouble 창) / picker</td></tr>
+    <tr><td><kbd>&lt;leader&gt;cS</kbd></td><td>정의·참조 등을 한 창에 (Trouble LSP)</td></tr>
+    <tr><td><kbd>&lt;leader&gt;uh</kbd></td><td>inlay hint 토글 (타입·인자 이름 인라인 표시)</td></tr>
+    <tr><td><kbd>&lt;leader&gt;cl</kbd></td><td>LspInfo — 무슨 서버가 붙었나, 왜 안 붙나</td></tr>
+    <tr><td><kbd>&lt;leader&gt;cv</kbd></td><td>Python venv 선택 (pyright 가 그 환경 패키지를 보게)</td></tr>
+    <tr><td><kbd>&lt;leader&gt;cD</kbd></td><td>docstring 뼈대 생성 (doge) — 함수 위에서</td></tr>
+  </table></div>
+  <div class="try">
+    <h3><span class="eyebrow">해보기</span>정의 → 참조 → 이름 변경</h3>
+    <ol class="steps">
+      <li><label><input type="checkbox" data-id="s5-1"><span>아무 프로젝트의 Python/TS 파일을 열고 상태줄에 서버(pyright·ruff / vtsls) 가 뜨는지. 안 뜨면 <kbd>&lt;leader&gt;cl</kbd></span></label></li>
+      <li><label><input type="checkbox" data-id="s5-2"><span>함수 호출 위에서 <kbd>K</kbd> → <kbd>gd</kbd> → <kbd>&lt;C-o&gt;</kbd> 로 복귀</span></label></li>
+      <li><label><input type="checkbox" data-id="s5-3"><span>같은 자리에서 <kbd>gr</kbd> — 참조 목록에서 하나 골라 이동</span></label></li>
+      <li><label><input type="checkbox" data-id="s5-4"><span>변수 하나를 <kbd>&lt;leader&gt;cr</kbd> 로 이름 변경 → <span class="expect">모든 사용처가 같이 바뀜</span> → <kbd>u</kbd> 로 되돌리기</span></label></li>
+      <li><label><input type="checkbox" data-id="s5-5"><span>안 쓰는 import 줄에서 <kbd>&lt;leader&gt;ca</kbd> → 제거 액션 선택</span></label></li>
+      <li><label><input type="checkbox" data-id="s5-6"><span><kbd>&lt;leader&gt;uh</kbd> 켜고 함수 호출 인자 옆 힌트 보기</span></label></li>
+    </ol>
+  </div>
+  <p class="trap">Python 은 <b>진단이 ruff 만</b> 나온다 (설정 D1). 타입 에러(<code>x: int = "a"</code>)는 표시되지 않는다. 필요하면 <code>lua/plugins/lsp.lua</code> 의 <code>ignore</code> 를 지운다.</p>
+  <p class="trap">Java 는 JDK 21 이 PATH 에 있어야 jdtls 가 뜬다 — fish 터미널에서 실행. 첫 프로젝트는 인덱싱에 1~2분.</p>
+</section>
+
+<!-- ============================================================ -->
+<section class="wf" id="s6">
+  <div class="head"><span class="n">06</span><h2>진단 · 문제 목록</h2><span class="p" data-p="s6"></span></div>
+  <p class="when"><b>빨간 밑줄이 여러 개일 때</b> 하나씩 <kbd>]d</kbd> 로 돌지 말고 <kbd>&lt;leader&gt;xx</kbd> 로 목록을 띄워 놓고 <kbd>]q</kbd> 로 넘긴다. TODO 주석도 같은 창에 모인다.</p>
+  <div class="tablewrap"><table class="keys">
+    <tr><th>키</th><th>동작</th></tr>
+    <tr><td><kbd>]d</kbd> / <kbd>[d</kbd></td><td>다음 / 이전 진단. <kbd>]e</kbd> <kbd>[e</kbd> 는 에러만, <kbd>]w</kbd> <kbd>[w</kbd> 경고만</td></tr>
+    <tr><td><kbd>&lt;leader&gt;cd</kbd></td><td>현재 줄 진단 전문 (float)</td></tr>
+    <tr><td><kbd>&lt;leader&gt;xx</kbd> / <kbd>xX</kbd></td><td>Trouble: 프로젝트 전체 / 현재 버퍼 진단 목록</td></tr>
+    <tr><td><kbd>]q</kbd> / <kbd>[q</kbd></td><td>Trouble·quickfix 항목 이동 (목록 창에 있지 않아도 됨)</td></tr>
+    <tr><td><kbd>&lt;leader&gt;sd</kbd> / <kbd>sD</kbd></td><td>진단을 picker 로 (전체 / 버퍼)</td></tr>
+    <tr><td><kbd>&lt;leader&gt;xq</kbd> / <kbd>xl</kbd></td><td>quickfix / location 리스트 (Trouble)</td></tr>
+    <tr><td><kbd>]t</kbd> / <kbd>[t</kbd> · <kbd>&lt;leader&gt;st</kbd> · <kbd>xt</kbd></td><td>TODO/FIX/HACK 주석 이동 · picker · Trouble</td></tr>
+    <tr><td><kbd>&lt;leader&gt;ud</kbd></td><td>진단 표시 끄기/켜기 (집중할 때)</td></tr>
+    <tr><td><kbd>&lt;leader&gt;uf</kbd> / <kbd>uF</kbd></td><td>저장 시 자동 포맷 토글 (전역 / 버퍼)</td></tr>
+  </table></div>
+  <div class="try">
+    <h3><span class="eyebrow">해보기</span>Trouble 로 훑기</h3>
+    <ol class="steps">
+      <li><label><input type="checkbox" data-id="s6-1"><span>Python 파일에 <code>import os</code> 와 <code>x = undefined_name</code> 를 넣는다 → <span class="expect">ruff 진단 2개</span></span></label></li>
+      <li><label><input type="checkbox" data-id="s6-2"><span><kbd>]d</kbd> <kbd>[d</kbd> 로 왕복, 진단 위에서 <kbd>&lt;leader&gt;cd</kbd></span></label></li>
+      <li><label><input type="checkbox" data-id="s6-3"><span><kbd>&lt;leader&gt;xx</kbd> → 아래 Trouble 창 → <kbd>]q</kbd> 로 다음 항목 → 창에서 <kbd>q</kbd> 닫기</span></label></li>
+      <li><label><input type="checkbox" data-id="s6-4"><span>주석에 <code># TODO: 나중에</code> 쓰고 <kbd>&lt;leader&gt;st</kbd> 로 찾기</span></label></li>
+      <li><label><input type="checkbox" data-id="s6-5"><span><kbd>&lt;leader&gt;ca</kbd> 로 안 쓰는 import 제거 액션 실행</span></label></li>
+    </ol>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<section class="wf" id="s7">
+  <div class="head"><span class="n">07</span><h2>Git</h2><span class="p" data-p="s7"></span></div>
+  <p class="when"><b>커밋·푸시·리베이스는 lazygit</b>(<kbd>&lt;leader&gt;gg</kbd>)에서, <b>"이 줄 누가 언제 바꿨지"</b>는 <kbd>&lt;leader&gt;gb</kbd>, <b>수정한 부분만 보고 싶다</b>는 <kbd>]h</kbd> / <kbd>&lt;leader&gt;gd</kbd>.</p>
+  <div class="tablewrap"><table class="keys">
+    <tr><th>키</th><th>동작</th></tr>
+    <tr><td><kbd>&lt;leader&gt;gg</kbd></td><td>lazygit (프로젝트 루트). 안에서: <kbd>space</kbd> 스테이지, <kbd>c</kbd> 커밋, <kbd>P</kbd> 푸시, <kbd>p</kbd> 풀, <kbd>?</kbd> 전체 키, <kbd>q</kbd> 나가기</td></tr>
+    <tr><td><kbd>]h</kbd> / <kbd>[h</kbd></td><td>다음 / 이전 변경 hunk</td></tr>
+    <tr><td><kbd>&lt;leader&gt;ghp</kbd> / <kbd>ghs</kbd> / <kbd>ghr</kbd></td><td>hunk 미리보기 / 스테이지 / 되돌리기 (커서 위치 hunk 만)</td></tr>
+    <tr><td><kbd>&lt;leader&gt;gb</kbd></td><td>현재 줄 blame</td></tr>
+    <tr><td><kbd>&lt;leader&gt;gd</kbd> / <kbd>gD</kbd></td><td>변경 hunk 목록 / origin 과 diff</td></tr>
+    <tr><td><kbd>&lt;leader&gt;gf</kbd> / <kbd>gl</kbd> / <kbd>gL</kbd></td><td>현재 파일 히스토리 / 로그 (루트) / 로그 (cwd)</td></tr>
+    <tr><td><kbd>&lt;leader&gt;gs</kbd> / <kbd>gS</kbd></td><td>status / stash 목록</td></tr>
+    <tr><td><kbd>&lt;leader&gt;gB</kbd> / <kbd>gY</kbd></td><td>GitHub 에서 이 파일(줄) 열기 / 링크 복사</td></tr>
+    <tr><td><kbd>&lt;leader&gt;gi</kbd> / <kbd>gp</kbd></td><td>GitHub 이슈 / PR 목록 (gh CLI 필요)</td></tr>
+    <tr><td><kbd>&lt;leader&gt;uG</kbd></td><td>gutter 의 git 표시 토글</td></tr>
+  </table></div>
+  <div class="try">
+    <h3><span class="eyebrow">해보기</span>hunk 단위로 커밋</h3>
+    <ol class="steps">
+      <li><label><input type="checkbox" data-id="s7-1"><span>이 저장소에서 두 군데를 고친다 (서로 떨어진 위치)</span></label></li>
+      <li><label><input type="checkbox" data-id="s7-2"><span><kbd>]h</kbd> 로 첫 hunk 로 → <kbd>&lt;leader&gt;ghp</kbd> 미리보기 → <kbd>&lt;leader&gt;ghs</kbd> 스테이지</span></label></li>
+      <li><label><input type="checkbox" data-id="s7-3"><span><kbd>]h</kbd> 두 번째 hunk → <kbd>&lt;leader&gt;ghr</kbd> 로 되돌리기</span></label></li>
+      <li><label><input type="checkbox" data-id="s7-4"><span><kbd>&lt;leader&gt;gg</kbd> → 스테이지된 것만 보이는지 확인 → <kbd>c</kbd> 커밋 (또는 <kbd>q</kbd> 로 취소)</span></label></li>
+      <li><label><input type="checkbox" data-id="s7-5"><span><kbd>&lt;leader&gt;gf</kbd> 로 이 파일의 커밋 이력 보기</span></label></li>
+    </ol>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<section class="wf" id="s8">
+  <div class="head"><span class="n">08</span><h2>터미널 · 창</h2><span class="p" data-p="s8"></span></div>
+  <p class="when"><b>명령 하나 치고 돌아올 땐 플로팅</b>(<kbd>&lt;C-\&gt;</kbd>), <b>빌드 로그를 계속 볼 땐 아래</b>(<kbd>&lt;C-/&gt;</kbd>), <b>REPL 을 옆에 두고 코딩할 땐 오른쪽</b>(<kbd>&lt;leader&gt;fh</kbd>). 셋은 서로 다른 셸이다.</p>
+  <div class="tablewrap"><table class="keys">
+    <tr><th>키</th><th>동작</th></tr>
+    <tr><td><kbd>&lt;C-\&gt;</kbd></td><td>플로팅 터미널 토글 — 터미널 안에서도 같은 키로 닫힘</td></tr>
+    <tr><td><kbd>&lt;C-/&gt;</kbd></td><td>아래 터미널 토글 (프로젝트 루트)</td></tr>
+    <tr><td><kbd>&lt;leader&gt;fh</kbd></td><td>오른쪽 세로 터미널</td></tr>
+    <tr><td><kbd>&lt;leader&gt;ft</kbd> / <kbd>fT</kbd></td><td>터미널 (루트 / cwd)</td></tr>
+    <tr><td><kbd>&lt;Esc&gt;&lt;Esc&gt;</kbd></td><td>터미널 안에서 normal 모드로 (스크롤·복사). <kbd>i</kbd> 로 복귀</td></tr>
+    <tr><td><kbd>&lt;C-h/j/k/l&gt;</kbd></td><td>창 사이 이동 (터미널 창 포함)</td></tr>
+    <tr><td><kbd>&lt;leader&gt;-</kbd> / <kbd>|</kbd></td><td>가로 / 세로 분할. <kbd>&lt;leader&gt;wd</kbd> 닫기</td></tr>
+    <tr><td><kbd>&lt;C-Up/Down/Left/Right&gt;</kbd></td><td>창 크기 조절</td></tr>
+    <tr><td><kbd>&lt;leader&gt;wm</kbd> / <kbd>uZ</kbd></td><td>현재 창 최대화 토글 (zoom)</td></tr>
+    <tr><td><kbd>&lt;leader&gt;&lt;tab&gt;&lt;tab&gt;</kbd> · <kbd>]</kbd> · <kbd>[</kbd> · <kbd>d</kbd></td><td>탭 새로 / 다음 / 이전 / 닫기</td></tr>
+  </table></div>
+  <div class="try">
+    <h3><span class="eyebrow">해보기</span>세 터미널 구분하기</h3>
+    <ol class="steps">
+      <li><label><input type="checkbox" data-id="s8-1"><span><kbd>&lt;C-\&gt;</kbd> → <code>echo float</code> → <kbd>&lt;C-\&gt;</kbd> 닫기 → 다시 열어 <span class="expect">출력이 남아있는지</span></span></label></li>
+      <li><label><input type="checkbox" data-id="s8-2"><span><kbd>&lt;C-/&gt;</kbd> → <code>echo bottom</code> → <kbd>&lt;C-k&gt;</kbd> 로 위 편집창 → <kbd>&lt;C-j&gt;</kbd> 로 복귀</span></label></li>
+      <li><label><input type="checkbox" data-id="s8-3"><span>터미널에서 <kbd>&lt;Esc&gt;&lt;Esc&gt;</kbd> → <kbd>k</kbd> 로 스크롤 → <kbd>yy</kbd> 로 줄 복사 → <kbd>i</kbd></span></label></li>
+      <li><label><input type="checkbox" data-id="s8-4"><span><kbd>&lt;leader&gt;fh</kbd> 오른쪽 터미널에서 <code>python3</code> REPL → 왼쪽에서 코드 보며 실험</span></label></li>
+      <li><label><input type="checkbox" data-id="s8-5"><span><kbd>&lt;leader&gt;wm</kbd> 로 편집창 최대화 → 다시 <kbd>&lt;leader&gt;wm</kbd></span></label></li>
+    </ol>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<section class="wf" id="s9">
+  <div class="head"><span class="n">09</span><h2>테스트 (neotest)</h2><span class="p" data-p="s9"></span></div>
+  <p class="when"><b>테스트를 터미널에서 <code>pytest</code>/<code>mvn test</code> 로 돌리고 결과를 눈으로 찾던 것</b>을 에디터 안으로 가져온다. 커서 위치의 테스트 하나만 실행하고, 실패하면 그 줄에 ✗ 와 메시지가 붙는다. <b>파일 저장할 때마다 자동 재실행</b>(watch)도 된다.</p>
+  <p>지원: <b>Python</b>(pytest — venv 에 pytest 설치 + <kbd>&lt;leader&gt;cv</kbd> 로 venv 선택), <b>Java</b>(JUnit — Maven/Gradle 프로젝트, neotest-java). 다른 언어는 어댑터를 추가해야 한다.</p>
+  <div class="tablewrap"><table class="keys">
+    <tr><th>키</th><th>동작</th></tr>
+    <tr><td><kbd>&lt;leader&gt;ts</kbd></td><td>요약 창 — 파일/클래스/테스트 트리와 결과. 여기서 <kbd>r</kbd> 실행, <kbd>o</kbd> 출력, <kbd>i</kbd> 점프</td></tr>
+    <tr><td><kbd>&lt;leader&gt;tr</kbd></td><td><b>커서 위치의 테스트 하나</b> 실행 — 가장 많이 쓴다</td></tr>
+    <tr><td><kbd>&lt;leader&gt;tt</kbd></td><td>현재 파일의 테스트 전부</td></tr>
+    <tr><td><kbd>&lt;leader&gt;tT</kbd></td><td>프로젝트 테스트 파일 전부</td></tr>
+    <tr><td><kbd>&lt;leader&gt;tl</kbd></td><td>마지막에 돌린 것 다시</td></tr>
+    <tr><td><kbd>&lt;leader&gt;to</kbd> / <kbd>tO</kbd></td><td>실패 출력 float / 아래 패널로 고정</td></tr>
+    <tr><td><kbd>&lt;leader&gt;tw</kbd></td><td>watch — 파일 저장마다 자동 실행 토글</td></tr>
+    <tr><td><kbd>&lt;leader&gt;td</kbd></td><td>커서 테스트를 <b>디버거로</b> 실행 (브레이크포인트 걸어두고)</td></tr>
+    <tr><td><kbd>&lt;leader&gt;tS</kbd> / <kbd>ta</kbd></td><td>중단 / 실행 중인 테스트에 attach</td></tr>
+    <tr><td><kbd>]d</kbd> 등</td><td>실패는 진단으로도 등록되어 06 의 키가 그대로 통한다</td></tr>
+  </table></div>
+  <div class="try">
+    <h3><span class="eyebrow">해보기</span>pytest 한 개 → 실패 → 고치기 → watch</h3>
+    <ol class="steps">
+      <li><label><input type="checkbox" data-id="s9-1"><span>빈 폴더에서 <code>uv init t &amp;&amp; cd t &amp;&amp; uv add --dev pytest</code>, <code>test_a.py</code> 에 <code>def test_ok(): assert 1 == 1</code> 과 <code>def test_bad(): assert 1 == 2</code></span></label></li>
+      <li><label><input type="checkbox" data-id="s9-2"><span><code>nvim test_a.py</code> → <kbd>&lt;leader&gt;cv</kbd> 로 <code>.venv</code> 선택</span></label></li>
+      <li><label><input type="checkbox" data-id="s9-3"><span><kbd>&lt;leader&gt;ts</kbd> 요약 창에 테스트 2개가 보이는지</span></label></li>
+      <li><label><input type="checkbox" data-id="s9-4"><span><code>test_bad</code> 안에서 <kbd>&lt;leader&gt;tr</kbd> → <span class="expect">gutter 에 ✗, 줄 끝에 assert 메시지</span> → <kbd>&lt;leader&gt;to</kbd> 로 전체 출력</span></label></li>
+      <li><label><input type="checkbox" data-id="s9-5"><span><kbd>&lt;leader&gt;tw</kbd> 켜고 <code>1 == 2</code> 를 <code>2 == 2</code> 로 고쳐 저장 → <span class="expect">자동으로 ✓</span></span></label></li>
+      <li><label><input type="checkbox" data-id="s9-6"><span><kbd>&lt;leader&gt;tt</kbd> 파일 전체 → 요약 창에서 결과 트리 확인</span></label></li>
+    </ol>
+  </div>
+  <p class="trap">요약 창이 비어 있으면 어댑터가 프로젝트를 못 알아본 것이다. Python 은 <code>pytest</code> 가 선택된 venv 에 있어야 하고, Java 는 <code>pom.xml</code>/<code>build.gradle</code> 이 루트에 있어야 한다.</p>
+</section>
+
+<!-- ============================================================ -->
+<section class="wf" id="s10">
+  <div class="head"><span class="n">10</span><h2>디버깅 (DAP)</h2><span class="p" data-p="s10"></span></div>
+  <p class="when"><b><code>print</code> 를 세 개 이상 찍고 있다면</b> 브레이크포인트를 건다. 특정 조건일 때만 멈추는 조건부 브레이크포인트(<kbd>&lt;leader&gt;dB</kbd>)가 루프 디버깅의 핵심. 어댑터는 mason 이 깔아뒀다: Python <code>debugpy</code>, JS <code>js-debug</code>, Java <code>java-debug</code>, Rust/C <code>codelldb</code>.</p>
+  <div class="tablewrap"><table class="keys">
+    <tr><th>키</th><th>동작</th></tr>
+    <tr><td><kbd>&lt;leader&gt;db</kbd> / <kbd>dB</kbd></td><td>브레이크포인트 토글 / 조건부 (<code>i == 42</code> 같은 식 입력)</td></tr>
+    <tr><td><kbd>&lt;leader&gt;dc</kbd></td><td>시작 / 계속. 처음엔 실행 구성(파일 실행, 모듈, attach…)을 고른다</td></tr>
+    <tr><td><kbd>&lt;leader&gt;du</kbd></td><td>DAP UI — 변수·스택·브레이크포인트·REPL 패널 토글</td></tr>
+    <tr><td><kbd>&lt;leader&gt;dO</kbd> / <kbd>di</kbd> / <kbd>do</kbd></td><td>step over / into / out</td></tr>
+    <tr><td><kbd>&lt;leader&gt;dC</kbd></td><td>커서 줄까지 실행</td></tr>
+    <tr><td><kbd>&lt;leader&gt;de</kbd></td><td>커서 아래 식(또는 선택) 평가</td></tr>
+    <tr><td><kbd>&lt;leader&gt;dr</kbd></td><td>REPL — 멈춘 상태에서 식 입력</td></tr>
+    <tr><td><kbd>&lt;leader&gt;dl</kbd> / <kbd>da</kbd></td><td>마지막 구성으로 다시 / 인자 넣어 실행</td></tr>
+    <tr><td><kbd>&lt;leader&gt;dt</kbd></td><td>종료</td></tr>
+    <tr><td><kbd>&lt;leader&gt;td</kbd></td><td>(09) 커서 테스트를 디버거로</td></tr>
+  </table></div>
+  <div class="try">
+    <h3><span class="eyebrow">해보기</span>루프 안 조건부 정지</h3>
+    <ol class="steps">
+      <li><label><input type="checkbox" data-id="s10-1"><span>Python 파일: <code>for i in range(100): total = i * 2</code> 뒤에 <code>print(total)</code></span></label></li>
+      <li><label><input type="checkbox" data-id="s10-2"><span><code>total = …</code> 줄에서 <kbd>&lt;leader&gt;dB</kbd> → 조건 <code>i == 42</code></span></label></li>
+      <li><label><input type="checkbox" data-id="s10-3"><span><kbd>&lt;leader&gt;dc</kbd> → "file" 구성 선택 → <span class="expect">i 가 42 일 때 멈춤</span></span></label></li>
+      <li><label><input type="checkbox" data-id="s10-4"><span><kbd>&lt;leader&gt;du</kbd> 로 변수 패널 열어 <code>i</code>, <code>total</code> 확인 → <kbd>&lt;leader&gt;de</kbd> 로 <code>i * 3</code> 평가</span></label></li>
+      <li><label><input type="checkbox" data-id="s10-5"><span><kbd>&lt;leader&gt;dO</kbd> 몇 번 → <kbd>&lt;leader&gt;dt</kbd> 종료 → <kbd>&lt;leader&gt;du</kbd> 로 패널 닫기</span></label></li>
+    </ol>
+  </div>
+  <p class="trap">"No configuration found" 가 뜨면 그 언어의 dap 어댑터가 없는 것. <code>:Mason</code> 에서 debugpy / codelldb / js-debug-adapter / java-debug-adapter 설치 여부 확인.</p>
+</section>
+
+<!-- ============================================================ -->
+<section class="wf" id="s11">
+  <div class="head"><span class="n">11</span><h2>데이터베이스 (dadbod)</h2><span class="p" data-p="s11"></span></div>
+  <p class="when"><b>앱 코드 옆에서 "이 쿼리 결과가 뭐지" 를 바로 확인</b>할 때. 접속을 한 번 등록해 두면 <kbd>&lt;leader&gt;D</kbd> 로 왼쪽에 DB 트리가 열리고, SQL 버퍼에서 쿼리를 실행하면 아래에 결과가 표로 뜬다. 테이블·컬럼 이름 자동완성도 된다.</p>
+  <p>dadbod 는 <b>DB 클라이언트 바이너리를 셸로 호출</b>한다 — Postgres 는 <code>psql</code>, MySQL 은 <code>mysql</code>, SQLite 는 <code>sqlite3</code> 가 PATH 에 있어야 한다 (SETUP.md §3).</p>
+  <div class="tablewrap"><table class="keys">
+    <tr><th>키 / 명령</th><th>동작</th></tr>
+    <tr><td><kbd>&lt;leader&gt;D</kbd></td><td>DBUI 트리 토글</td></tr>
+    <tr><td><code>:DBUIAddConnection</code></td><td>접속 추가. URL 형식: <code>sqlite:///abs/path.db</code>, <code>postgres://user:pw@host:5432/db</code>, <code>mysql://user:pw@host/db</code></td></tr>
+    <tr><td>트리에서 <kbd>&lt;CR&gt;</kbd></td><td>펼치기 / 테이블이면 helper 쿼리(List, Indexes, …) 열기</td></tr>
+    <tr><td>SQL 버퍼에서 <kbd>&lt;leader&gt;S</kbd></td><td>쿼리 실행 (선택 영역이 있으면 그 부분만)</td></tr>
+    <tr><td><kbd>&lt;leader&gt;W</kbd></td><td>쿼리를 이름 붙여 저장 (트리의 Saved queries 에 남음)</td></tr>
+    <tr><td>결과 창에서 <kbd>&lt;C-]&gt;</kbd> … </td><td>결과 창은 일반 버퍼 — <kbd>/</kbd> 검색, <kbd>yy</kbd> 복사 그대로</td></tr>
+  </table></div>
+  <div class="try">
+    <h3><span class="eyebrow">해보기</span>SQLite 파일 하나로 끝까지</h3>
+    <ol class="steps">
+      <li><label><input type="checkbox" data-id="s11-1"><span>터미널: <code>sqlite3 /tmp/t.db "create table u(id int, name text); insert into u values(1,'a'),(2,'b');"</code></span></label></li>
+      <li><label><input type="checkbox" data-id="s11-2"><span>nvim 에서 <code>:DBUIAddConnection</code> → <code>sqlite:////tmp/t.db</code> → 이름 <code>t</code></span></label></li>
+      <li><label><input type="checkbox" data-id="s11-3"><span><kbd>&lt;leader&gt;D</kbd> → <code>t</code> 펼치기 → Tables → <code>u</code> → <code>List</code> 에서 <kbd>&lt;CR&gt;</kbd> → <span class="expect">아래에 2행 결과</span></span></label></li>
+      <li><label><input type="checkbox" data-id="s11-4"><span>New query 에서 <code>select name from u where id = 2</code> 치며 <span class="expect">테이블·컬럼 자동완성</span> → <kbd>&lt;leader&gt;S</kbd></span></label></li>
+      <li><label><input type="checkbox" data-id="s11-5"><span><kbd>&lt;leader&gt;W</kbd> 로 저장 → 트리에 Saved queries 생기는지</span></label></li>
+    </ol>
+  </div>
+  <p class="trap">접속 정보는 <code>~/.local/share/nvim/dadbod_ui/connections.json</code> 에 평문으로 남는다. 저장소에 넣지 말고, 운영 DB 비밀번호는 URL 에 쓰지 말 것 (<code>~/.pgpass</code> 등 클라이언트 쪽 인증 사용).</p>
+</section>
+
+<!-- ============================================================ -->
+<section class="wf" id="s12">
+  <div class="head"><span class="n">12</span><h2>마크다운 · 문서</h2><span class="p" data-p="s12"></span></div>
+  <p class="when"><b>README·노트를 쓸 때.</b> 버퍼 안에서 제목·표·코드블록·체크박스가 렌더링되고(render-markdown), 이미지는 터미널이 지원하면 인라인으로 뜬다(snacks.image, ghostty). 브라우저 미리보기는 <kbd>&lt;leader&gt;cp</kbd>.</p>
+  <div class="tablewrap"><table class="keys">
+    <tr><th>키</th><th>동작</th></tr>
+    <tr><td>(자동)</td><td>normal 모드에선 렌더링, insert 로 들어간 줄은 원문 표시</td></tr>
+    <tr><td><kbd>&lt;leader&gt;cp</kbd></td><td>브라우저 미리보기 토글 (저장하면 실시간 반영)</td></tr>
+    <tr><td><kbd>&lt;leader&gt;uc</kbd></td><td>conceal 수준 토글 — 렌더링이 거슬리면 끈다</td></tr>
+    <tr><td><kbd>&lt;leader&gt;cf</kbd></td><td>prettier 로 표 정렬·목록 정리</td></tr>
+    <tr><td><kbd>]]</kbd> / <kbd>[[</kbd></td><td>다음 / 이전 제목</td></tr>
+    <tr><td><code>:InsertToc</code></td><td>목차 삽입 (markdown-toc)</td></tr>
+    <tr><td><kbd>gx</kbd></td><td>커서 아래 링크·파일 경로를 시스템으로 열기</td></tr>
+    <tr><td><code>nvim 파일.pdf</code></td><td>PDF 를 직접 열면 1페이지가 렌더링된다 (ghostscript 필요)</td></tr>
+    <tr><td><kbd>]p</kbd> / <kbd>[p</kbd> / <kbd>gp</kbd></td><td>PDF 다음 / 이전 / 번호로 페이지 이동 — 내가 추가한 키 (<code>autocmds.lua</code>). snacks 자체엔 페이지 키가 없고 <code>경로#page=N</code> 으로 고르는 구조라 그걸 감쌌다</td></tr>
+    <tr><td><code>![](문서.pdf#page=3)</code></td><td>마크다운 안에 특정 페이지를 인라인으로 박아 넣기</td></tr>
+  </table></div>
+  <div class="try">
+    <h3><span class="eyebrow">해보기</span>이 저장소 README 로</h3>
+    <ol class="steps">
+      <li><label><input type="checkbox" data-id="s12-1"><span><code>README.md</code> 열기 → 표와 코드블록이 렌더링되는지 → 표 위에서 <kbd>i</kbd> 로 원문 확인</span></label></li>
+      <li><label><input type="checkbox" data-id="s12-2"><span><kbd>&lt;leader&gt;cp</kbd> → 브라우저 창 → 제목 하나 고치고 저장 → <span class="expect">브라우저 갱신</span> → 다시 <kbd>&lt;leader&gt;cp</kbd></span></label></li>
+      <li><label><input type="checkbox" data-id="s12-3"><span><code>![](경로.png)</code> 줄을 넣고 ghostty 에서 <span class="expect">이미지가 인라인으로</span> (안 뜨면 <code>:checkhealth snacks</code>)</span></label></li>
+      <li><label><input type="checkbox" data-id="s12-4"><span>표를 일부러 흐트러뜨리고 <kbd>&lt;leader&gt;cf</kbd></span></label></li>
+      <li><label><input type="checkbox" data-id="s12-5"><span>여러 장짜리 PDF 를 <code>nvim x.pdf</code> 로 열고 <kbd>]p</kbd> <kbd>]p</kbd> <kbd>[p</kbd> → <span class="expect">우상단 알림에 "PDF 2 / N"</span> → <kbd>gp</kbd> 로 마지막 페이지 번호 입력</span></label></li>
+      <li><label><input type="checkbox" data-id="s12-6"><span>스크래치 마크다운에 <code>![](그 pdf 경로#page=2)</code> 를 쓰고 normal 모드로 — <span class="expect">2페이지가 인라인</span></span></label></li>
+    </ol>
+  </div>
+  <p class="trap">PDF 는 imagemagick 이 ghostscript(<code>gs</code>)에 위임하므로 <code>gs</code> 가 없으면 안 뜬다. Mermaid 는 <code>mmdc</code>, 수식은 <code>tectonic</code> 이 필요 (SETUP.md §4).</p>
+</section>
+
+<!-- ============================================================ -->
+<section class="wf" id="s13">
+  <div class="head"><span class="n">13</span><h2>UI 토글 · 세션</h2><span class="p" data-p="s13"></span></div>
+  <p class="when"><b>화면이 시끄럽다 / 뭔가 꺼졌다</b> 싶으면 <kbd>&lt;leader&gt;u</kbd> 를 누르고 기다린다 — 전부 토글이라 한 번 더 누르면 원복. <b>어제 하던 자리로</b>는 <kbd>&lt;leader&gt;qs</kbd>.</p>
+  <div class="tablewrap"><table class="keys">
+    <tr><th>키</th><th>동작</th></tr>
+    <tr><td><kbd>&lt;leader&gt;uw</kbd> / <kbd>ul</kbd> / <kbd>uL</kbd></td><td>줄바꿈 / 줄번호 / 상대 줄번호</td></tr>
+    <tr><td><kbd>&lt;leader&gt;uh</kbd> / <kbd>ud</kbd> / <kbd>uf</kbd></td><td>inlay hint / 진단 / 자동 포맷</td></tr>
+    <tr><td><kbd>&lt;leader&gt;us</kbd> / <kbd>uc</kbd> / <kbd>ug</kbd></td><td>맞춤법 / conceal / 들여쓰기 가이드</td></tr>
+    <tr><td><kbd>&lt;leader&gt;uz</kbd> / <kbd>uZ</kbd> / <kbd>uD</kbd></td><td>Zen 모드 / 줌 / 비활성 코드 흐리게</td></tr>
+    <tr><td><kbd>&lt;leader&gt;ub</kbd> / <kbd>uC</kbd></td><td>다크·라이트 배경 / 컬러스킴 고르기 (미리보기)</td></tr>
+    <tr><td><kbd>&lt;leader&gt;ua</kbd> / <kbd>uS</kbd></td><td>애니메이션 / 부드러운 스크롤</td></tr>
+    <tr><td><kbd>&lt;leader&gt;uT</kbd> / <kbd>uI</kbd></td><td>treesitter 하이라이트 / 문법 트리 보기</td></tr>
+    <tr><td><kbd>&lt;leader&gt;n</kbd> / <kbd>un</kbd></td><td>알림 이력 / 전부 닫기</td></tr>
+    <tr><td><kbd>&lt;leader&gt;qs</kbd> / <kbd>ql</kbd> / <kbd>qS</kbd></td><td>이 디렉토리 세션 복원 / 마지막 세션 / 세션 고르기</td></tr>
+    <tr><td><kbd>&lt;leader&gt;qd</kbd></td><td>이번엔 세션 저장 안 함</td></tr>
+    <tr><td><kbd>&lt;leader&gt;L</kbd></td><td>LazyVim 변경 로그 — 업데이트 후 뭐가 바뀌었나</td></tr>
+  </table></div>
+  <div class="try">
+    <h3><span class="eyebrow">해보기</span>세션 왕복</h3>
+    <ol class="steps">
+      <li><label><input type="checkbox" data-id="s13-1"><span>파일 셋 열고 창을 둘로 나눈 채 <kbd>&lt;leader&gt;qq</kbd></span></label></li>
+      <li><label><input type="checkbox" data-id="s13-2"><span>같은 디렉토리에서 <code>nvim</code> → 대시보드에서 <kbd>s</kbd>(또는 <kbd>&lt;leader&gt;qs</kbd>) → <span class="expect">창 배치까지 복원</span></span></label></li>
+      <li><label><input type="checkbox" data-id="s13-3"><span><kbd>&lt;leader&gt;uz</kbd> Zen → <kbd>&lt;leader&gt;uz</kbd> 해제</span></label></li>
+      <li><label><input type="checkbox" data-id="s13-4"><span><kbd>&lt;leader&gt;uC</kbd> 로 컬러스킴 미리보기만 하고 <kbd>Esc</kbd></span></label></li>
+    </ol>
+  </div>
+</section>
+
+<footer>
+  <p>키맵 출처: 이 설정에서 실측한 <code>nvim_get_keymap</code> 결과 (2026-09-08, LazyVim c10948c · nvim 0.12.5). LSP·gitsigns·dadbod 키는 버퍼에 붙을 때만 생긴다.</p>
+  <p>바뀐 키가 있으면 <kbd>&lt;leader&gt;sk</kbd> 가 항상 정답이다. 문서: README.md · SETUP.md · REFACTOR.md</p>
+  <button type="button" id="reset">체크 전부 지우기</button>
+</footer>
+</main>
+</div>
+
+<script>
+(function () {
+  var KEY = "nvim-guide-done";
+  var state = {};
+  try { state = JSON.parse(localStorage.getItem(KEY) || "{}") || {}; } catch (e) { state = {}; }
+
+  var boxes = Array.prototype.slice.call(document.querySelectorAll("ol.steps input[type=checkbox]"));
+
+  function save() {
+    try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {}
+  }
+  function progress() {
+    var per = {};
+    boxes.forEach(function (b) {
+      var sec = b.dataset.id.split("-")[0];
+      per[sec] = per[sec] || { done: 0, total: 0 };
+      per[sec].total++;
+      if (b.checked) per[sec].done++;
+    });
+    Array.prototype.forEach.call(document.querySelectorAll("[data-p]"), function (el) {
+      var p = per[el.dataset.p];
+      if (!p) return;
+      el.textContent = p.done + "/" + p.total;
+      el.classList.toggle("done", p.done === p.total);
+    });
+  }
+  boxes.forEach(function (b) {
+    b.checked = !!state[b.dataset.id];
+    b.addEventListener("change", function () {
+      if (b.checked) state[b.dataset.id] = 1; else delete state[b.dataset.id];
+      save(); progress();
+    });
+  });
+  document.getElementById("reset").addEventListener("click", function () {
+    state = {}; save();
+    boxes.forEach(function (b) { b.checked = false; });
+    progress();
+  });
+  progress();
+})();
+</script>

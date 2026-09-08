@@ -1,5 +1,6 @@
 # theme = Gruvbox Dark
-theme = TokyoNight
+# OS 라이트/다크를 따라감. nvim 은 터미널 배경색을 감지해 tokyonight day/moon 을 자동 선택한다 (nvim README 참고)
+theme = light:TokyoNight Day,dark:TokyoNight Moon
 macos-titlebar-style = tabs
 background-opacity = 0.85
 background-blur=true
