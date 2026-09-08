@@ -48,6 +48,7 @@ lua/lsp/                  옛 설정 백업(.bak)만 있음. 새 파일 넣지 �
 | `jk`         | i    | ESC                                   |
 | `<leader>fh` | n    | 오른쪽 세로 터미널 (snacks.terminal)  |
 | `<C-\>`      | n, t | 플로팅 터미널 토글 (터미널 안에서도)  |
+| `]p` / `[p` / `gp` | n (PDF 버퍼) | PDF 다음 / 이전 / 번호로 페이지 (`autocmds.lua`, snacks 는 페이지 키가 없음) |
 
 그 외는 전부 LazyVim 기본. 자주 쓰는 것:
 

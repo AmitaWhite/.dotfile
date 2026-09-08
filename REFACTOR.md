@@ -62,6 +62,15 @@
 - [x] D3 tree-sitter CLI — mason 것(0.26.8)을 그대로 쓰고 `options.lua` 에서 mason bin 을 PATH 앞에 선행 추가. 실측: mason 미로드 상태에서 `executable("tree-sitter") = 1`, `:checkhealth lazyvim` treesitter ERROR 소멸
 - [x] D4 mason `rust-analyzer` 제거 (`mason.lua` + 설치본 삭제). rustup 컴포넌트는 사용자가 `rustup component add rust-analyzer` 로 설치
 - [x] README 갱신 — 파일 맵 · 개인 키맵 3개 + LazyVim 자주 쓰는 키 · extras 일원화 · 다크모드 방식 · 의존성(tree-sitter CLI, rustup)
+- [x] 사용자 측 설치 완료 확인 — `rustup component add rust-analyzer`(1.92.0, rustc 와 동일), `brew install ghostscript`(10.07.1, PDF→PNG 변환 실측)
+
+## Phase 6 — 문서 · 가이드
+
+- [x] `SETUP.md` — 새 환경 세팅 (심링크 매핑 실측, 필수/언어별/선택 의존성과 이유, mason 런타임 표, 체크리스트, 플래그, 환경별 주의)
+- [x] `docs/guide.html` — 13 워크플로 × 언제·핵심 키·해보기·함정. 키는 `nvim_get_keymap` 실측(272 n-map) 기반, 버퍼 로컬 키(LSP·gitsigns·dadbod·탐색기)는 LazyVim/플러그인 기본값
+- [x] `TOOLS.md` 확장 (무엇 · 언제 · brew/pacman · nvim 관계), README 를 문서 허브로
+- [x] PDF 페이지 넘기기 — snacks.image 엔 키가 없고 `src#page=N` 으로 고르는 구조 → `autocmds.lua` 에 `]p` `[p` `gp` (filetype=image + .pdf 버퍼 한정, 총 페이지는 gs 로)
+- [x] `lazy-lock.json` 현행화 (커밋본이 설치본보다 낡아 있었음, 36개)
 
 ### 사고 기록 (2026-09-08)
 

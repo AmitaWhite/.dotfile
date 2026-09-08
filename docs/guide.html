@@ -554,6 +554,9 @@
     <tr><td><kbd>]]</kbd> / <kbd>[[</kbd></td><td>다음 / 이전 제목</td></tr>
     <tr><td><code>:InsertToc</code></td><td>목차 삽입 (markdown-toc)</td></tr>
     <tr><td><kbd>gx</kbd></td><td>커서 아래 링크·파일 경로를 시스템으로 열기</td></tr>
+    <tr><td><code>nvim 파일.pdf</code></td><td>PDF 를 직접 열면 1페이지가 렌더링된다 (ghostscript 필요)</td></tr>
+    <tr><td><kbd>]p</kbd> / <kbd>[p</kbd> / <kbd>gp</kbd></td><td>PDF 다음 / 이전 / 번호로 페이지 이동 — 내가 추가한 키 (<code>autocmds.lua</code>). snacks 자체엔 페이지 키가 없고 <code>경로#page=N</code> 으로 고르는 구조라 그걸 감쌌다</td></tr>
+    <tr><td><code>![](문서.pdf#page=3)</code></td><td>마크다운 안에 특정 페이지를 인라인으로 박아 넣기</td></tr>
   </table></div>
   <div class="try">
     <h3><span class="eyebrow">해보기</span>이 저장소 README 로</h3>
@@ -562,6 +565,8 @@
       <li><label><input type="checkbox" data-id="s12-2"><span><kbd>&lt;leader&gt;cp</kbd> → 브라우저 창 → 제목 하나 고치고 저장 → <span class="expect">브라우저 갱신</span> → 다시 <kbd>&lt;leader&gt;cp</kbd></span></label></li>
       <li><label><input type="checkbox" data-id="s12-3"><span><code>![](경로.png)</code> 줄을 넣고 ghostty 에서 <span class="expect">이미지가 인라인으로</span> (안 뜨면 <code>:checkhealth snacks</code>)</span></label></li>
       <li><label><input type="checkbox" data-id="s12-4"><span>표를 일부러 흐트러뜨리고 <kbd>&lt;leader&gt;cf</kbd></span></label></li>
+      <li><label><input type="checkbox" data-id="s12-5"><span>여러 장짜리 PDF 를 <code>nvim x.pdf</code> 로 열고 <kbd>]p</kbd> <kbd>]p</kbd> <kbd>[p</kbd> → <span class="expect">우상단 알림에 "PDF 2 / N"</span> → <kbd>gp</kbd> 로 마지막 페이지 번호 입력</span></label></li>
+      <li><label><input type="checkbox" data-id="s12-6"><span>스크래치 마크다운에 <code>![](그 pdf 경로#page=2)</code> 를 쓰고 normal 모드로 — <span class="expect">2페이지가 인라인</span></span></label></li>
     </ol>
   </div>
   <p class="trap">PDF 는 imagemagick 이 ghostscript(<code>gs</code>)에 위임하므로 <code>gs</code> 가 없으면 안 뜬다. Mermaid 는 <code>mmdc</code>, 수식은 <code>tectonic</code> 이 필요 (SETUP.md §4).</p>
