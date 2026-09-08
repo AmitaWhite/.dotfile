@@ -3,8 +3,14 @@
 Neovim 설정(LazyVim starter 기반)이 메인이고, 다른 머신에서 쓰던 config 백업
 (`caelestia-backup.bak/`, `*.bak`)이 같이 들어있는 개인 저장소.
 
-- 개인 CLI/TUI 도구 목록 → [TOOLS.md](TOOLS.md)
-- 설정 리팩터링 기록 · 작성 규칙 · 결정 사항 → [REFACTOR.md](REFACTOR.md)
+| 문서 | 내용 |
+| --- | --- |
+| [SETUP.md](SETUP.md) | **새 환경 세팅** — 심링크 매핑, 필수 도구와 이유, 언어 툴체인, 선택 기능, 첫 실행 체크리스트 |
+| [docs/guide.html](docs/guide.html) | **기능 가이드** — 워크플로별로 "언제 · 어떻게" 직접 해보며 익히는 페이지 |
+| [TOOLS.md](TOOLS.md) | 개인 CLI/TUI 도구 카탈로그 (용도 · 언제 · 설치) |
+| [REFACTOR.md](REFACTOR.md) | 설정 리팩터링 기록 · 작성 규칙 · 결정 사항 · 사고 기록 |
+
+이 저장소는 여러 환경(macOS Intel · Arch/CachyOS · WSL)을 오가며 쓴다. 환경 차이는 SETUP.md §9.
 
 ---
 
@@ -90,41 +96,17 @@ mason 자동설치: `stylua`, `shellcheck`, `shfmt`, `lemminx`. **rust-analyzer 
 
 ## 새 머신 세팅
 
-### 필수 (없으면 `:checkhealth` 빨간불)
+→ [SETUP.md](SETUP.md). 요약: 심링크 걸기 → 필수 도구(git·curl·rg·fd·fzf·lazygit·C 컴파일러·Nerd Font·node·python)
+→ 쓰는 언어 툴체인(JDK 21 sdkman · rustup · uv) → `nvim` 첫 실행 → `:checkhealth`.
 
-- `git`, `curl`
-- `rg` (ripgrep), `fd` — grep / 파일 검색
-- **C 컴파일러** (`cc` / `gcc` / clang) — treesitter 파서 컴파일
-- **`tree-sitter` CLI** — 파서 설치/업데이트. mason 이 설치한 것을 쓰고, `options.lua` 가 nvim 시작 시
-  mason bin 을 PATH 앞에 넣어준다 (mason 이 lazy-load 라 그 전엔 못 찾음).
-  ⚠️ `brew install tree-sitter` 는 CLI 가 아니라 **라이브러리**라 nvim 의 링크를 깨뜨릴 수 있고,
-  `tree-sitter-cli` 는 Intel 맥에서 llvm + rust 툴체인을 통째로 끌어온다 → 둘 다 쓰지 말 것
-- **Nerd Font** (예: JetBrainsMono Nerd Font) — 아이콘
-
-### 기능별 (있으면 좋음)
-
-| 패키지                   | 용도                                       |
-| ------------------------ | ------------------------------------------ |
-| `lazygit`                | Git UI (snacks 연동, `<leader>gg`)         |
-| `fzf`                    | 퍼지 검색 백엔드                           |
-| `imagemagick` (`magick`) | nvim 에서 이미지 · PDF 렌더 (snacks image) |
-| `node`                   | 일부 LSP (vtsls 등)                        |
-| `eza`                    | `ls` 대체, git 상태 표시 좋음              |
-| `bat`                    | 프리뷰 신택스 하이라이트                   |
-
-### 언어 툴체인
-
-- **sdkman** → Java (jdtls, lombok)
-- **rustup** → `rustup component add rust-analyzer` (mason 으로 깔지 않는다)
-- **uv** → Python
-- **node** (fnm / volta 등) → TS/JS
+⚠️ mac 에서 `brew install tree-sitter` 금지 (라이브러리라 nvim 링크가 깨짐). CLI 는 mason 것을 쓴다.
 
 ---
 
 ## 셸 / 터미널 환경
 
-- **fish** + **fisher** (플러그인 매니저)
-- **ghostty** — 터미널 에뮬레이터 (테마는 위 "다크/라이트" 참고)
+- **fish** + **fisher** (`reitzig/sdkman-for-fish` 로 JDK 초기화 — nvim 은 fish 터미널에서 실행)
+- **ghostty** — 터미널 에뮬레이터. 이미지 렌더(kitty graphics) 지원. 테마는 OS 를 따라가게 설정
 - **starship** — 프롬프트
 - **yazi** — 파일 매니저 · **zoxide** — 스마트 `cd`
 - **bat**, **tldr** — cat / man 대체
