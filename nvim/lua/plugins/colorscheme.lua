@@ -22,7 +22,10 @@ local transparent_groups = {
 --   · 메서드가 @lsp.type.method.java 로 덮여 styles.functions 의 italic 이 먹지 않는다
 -- 이 그룹들을 비워 두면 아래 treesitter 하이라이트가 그대로 드러난다.
 -- (helix 는 semantic token 을 요청조차 하지 않아서 항상 treesitter 만으로 칠한다 — 그 모양에 맞춘 것)
--- 단 namespace 는 treesitter 가 package 이름을 @variable 로 잡아 semantic 쪽이 더 나으므로 남긴다.
+--
+-- namespace 도 포함한다: jdtls 는 import/package 의 경로(java.util)를 namespace 로 보내 cyan 이 되지만,
+-- helix 의 java 쿼리는 scoped_identifier 를 대문자로 시작할 때만 @type 으로 잡아서(#match? "^[A-Z]")
+-- 소문자 경로는 아예 캡처하지 않는다 → 기본 전경색(흰색). treesitter 의 @variable 이 같은 결과다.
 local java_semantic_passthrough = {
   "@lsp.type.class.java",
   "@lsp.type.interface.java",
@@ -33,6 +36,7 @@ local java_semantic_passthrough = {
   "@lsp.type.parameter.java",
   "@lsp.type.variable.java",
   "@lsp.type.typeParameter.java",
+  "@lsp.type.namespace.java",
 }
 
 return {
