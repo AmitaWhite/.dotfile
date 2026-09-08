@@ -59,6 +59,14 @@ return {
       -- helix: "variable.parameter" = { fg = yellow, modifiers = ["italic"] }
       hl["@variable.parameter"] = { fg = c.yellow, italic = true }
 
+      -- helix 는 "type" 과 "type.builtin" 을 둘 다 aqua 로 준다. tokyonight 은 원시 타입(int, boolean …)만
+      -- 어둡게 잡아서 일반 타입과 톤이 어긋나 보인다 — helix 쪽 일관성을 따른다.
+      hl["@type.builtin"] = { fg = hl["@type"] and hl["@type"].fg or c.blue1 }
+
+      -- 참고: import/package(@keyword.import, cyan) 과 for/while(@keyword.repeat, magenta) 은
+      -- helix 의 java 쿼리가 이들을 전부 @keyword 하나로 뭉치기 때문에 helix 에선 보라로 나온다.
+      -- nvim 쪽이 정보량이 많아 일부러 그대로 둔다 (python·typescript 는 helix 도 세분화돼 있어 원래 같다).
+
       -- 위 설명 참고: 비워서 treesitter 가 보이게 한다
       for _, group in ipairs(java_semantic_passthrough) do
         hl[group] = {}
