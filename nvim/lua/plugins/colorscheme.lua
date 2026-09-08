@@ -2,11 +2,11 @@
 -- tokyonight 가 background=light 일 때 light_style 을 쓰는 방식으로 처리한다. (셸 호출 없음)
 -- 터미널(ghostty) 쪽도 OS 테마를 따라가도록 theme = light:...,dark:... 로 둬야 실제로 전환된다.
 --
--- 팔레트는 helix / ghostty 와 맞춘다:
---   ghostty TokyoNight 배경 = #1a1b26 = night 팔레트, helix 내장 tokyonight 테마도 night.
---   transparent = true 라 nvim 은 ghostty 배경 위에 글자만 얹으므로, 여기서 moon 을 쓰면
---   night 배경 위에 moon 색이 올라가 미묘하게 어긋난다. night 로 두면 13개 역할 중 12개가
---   helix 테마와 hex 단위로 같아진다 (constructor 만 다름: helix 는 aqua, tokyonight 은 purple).
+-- 팔레트는 helix 와 맞춘다:
+--   helix 내장 tokyonight 테마는 night 팔레트를 쓴다. 여기서도 night 를 쓰면 13개 역할 중 12개가
+--   helix 와 hex 단위로 같아진다 (constructor 만 다름: helix 는 aqua, tokyonight 은 purple).
+--   배경은 양쪽 다 투명(nvim transparent = true, helix "ui.background" = {})이라 ghostty 것이 보인다 —
+--   즉 ghostty 테마가 Moon 이든 Night 든 글자색은 이 설정이 정하고, helix 와 서로 일치한다.
 
 -- 테마가 배경을 칠하지 않게 할 하이라이트 그룹 (transparent 와 맞추기 위해)
 local transparent_groups = {
@@ -73,6 +73,14 @@ return {
       -- (treesitter 는 capture 마다 "@<capture>.<lang>" 그룹을 먼저 찾는다 — 실측 확인)
       hl["@keyword.import.java"] = { fg = c.purple, italic = true }
       hl["@keyword.repeat.java"] = { fg = c.purple, italic = true }
+
+      -- tokyonight 은 @lsp.type.interface 만 70% 로 흐리게 블렌딩해 일반 타입(#2ac3de)과 톤이 갈린다.
+      -- helix 는 interface 도 (type_identifier) @type 이라 같은 aqua 다. TS/TSX 에서 눈에 띈다.
+      hl["@lsp.type.interface"] = { fg = hl["@type"] and hl["@type"].fg or c.blue1 }
+
+      -- helix 의 _jsx 쿼리는 속성을 @attribute 로 잡고 테마가 attribute = cyan 을 준다.
+      -- tokyonight 의 @tag.attribute 는 녹색이라 JSX/HTML 속성 색이 갈렸다.
+      hl["@tag.attribute"] = { fg = c.cyan }
 
       -- 위 설명 참고: 비워서 treesitter 가 보이게 한다
       for _, group in ipairs(java_semantic_passthrough) do

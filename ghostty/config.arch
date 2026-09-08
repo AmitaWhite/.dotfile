@@ -10,6 +10,9 @@ theme = Gruvbox Dark
 # background-blur = true
 # background-blur-radius = 20
 
+# 커서를 그 밑 글자 색의 반전으로 그린다 (helix 의 ui.cursor = reversed 와 같은 모양)
+cursor-invert-fg-bg = true
+
 ## -- new split keybind to Set up like as Mac Ghostty default (cmd+d , cmd+shift+d)
 keybind = ctrl+shift+o=unbind
 keybind = ctrl+shift+e=unbind
