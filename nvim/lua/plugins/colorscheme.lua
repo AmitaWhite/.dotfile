@@ -63,9 +63,11 @@ return {
       -- 어둡게 잡아서 일반 타입과 톤이 어긋나 보인다 — helix 쪽 일관성을 따른다.
       hl["@type.builtin"] = { fg = hl["@type"] and hl["@type"].fg or c.blue1 }
 
-      -- 참고: import/package(@keyword.import, cyan) 과 for/while(@keyword.repeat, magenta) 은
-      -- helix 의 java 쿼리가 이들을 전부 @keyword 하나로 뭉치기 때문에 helix 에선 보라로 나온다.
-      -- nvim 쪽이 정보량이 많아 일부러 그대로 둔다 (python·typescript 는 helix 도 세분화돼 있어 원래 같다).
+      -- helix 의 java 쿼리는 keyword capture 가 @keyword 하나뿐이라 import·package 도 보라 italic 이다.
+      -- nvim 은 @keyword.import 로 쪼개 cyan 을 준다. helix 쪽이 더 낫다고 판단해 맞추되,
+      -- python·typescript 는 helix 도 import 를 cyan 으로 세분화하므로 java 에서만 바꾼다.
+      -- (treesitter 는 capture 마다 "@<capture>.<lang>" 그룹을 먼저 찾는다 — 실측 확인)
+      hl["@keyword.import.java"] = { fg = c.purple, italic = true }
 
       -- 위 설명 참고: 비워서 treesitter 가 보이게 한다
       for _, group in ipairs(java_semantic_passthrough) do
