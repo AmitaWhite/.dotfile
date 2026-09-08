@@ -1,6 +1,6 @@
 # nvim 설정 리팩터링 계획
 
-진단 기준: 2026-09-08, LazyVim `83d90f3`, nvim 0.12.4.
+진단 기준: 2026-09-08, LazyVim `83d90f3`, nvim 0.12.4 (Phase 5 중 0.12.5 로 업그레이드, 아래 사고 기록 참고).
 근거는 LazyVim 소스와 런타임 실측(VeryLazy 후 `nvim_get_keymap`, which-key health, `vim.ui.*` 소유자).
 
 한 줄 원인: 서로 다른 시대의 LazyVim 문서를 복붙한 설정이 재정렬 없이 쌓였고,
@@ -59,9 +59,20 @@
 
 - [x] D1 pyright/ruff 역할 확정 → `nvim-lspconfig.lua` 반영 (Phase 1 에서 처리)
 - [x] D2 터미널 단일화 → snacks.terminal 3 레이아웃 (`<C-/>` bottom · `<leader>fh` right · `<C-\>` float), Phase 2 에서 처리
-- [ ] D3 tree-sitter CLI — `brew install tree-sitter` 또는 감수 (mason 것은 mason 로드 후에만 PATH)
-- [ ] D4 mason `rust-analyzer` — rustup 것으로 통일할지
-- [ ] README 키맵 표 · 알아둘 점 갱신
+- [x] D3 tree-sitter CLI — mason 것(0.26.8)을 그대로 쓰고 `options.lua` 에서 mason bin 을 PATH 앞에 선행 추가. 실측: mason 미로드 상태에서 `executable("tree-sitter") = 1`, `:checkhealth lazyvim` treesitter ERROR 소멸
+- [x] D4 mason `rust-analyzer` 제거 (`mason.lua` + 설치본 삭제). rustup 컴포넌트는 사용자가 `rustup component add rust-analyzer` 로 설치
+- [x] README 갱신 — 파일 맵 · 개인 키맵 3개 + LazyVim 자주 쓰는 키 · extras 일원화 · 다크모드 방식 · 의존성(tree-sitter CLI, rustup)
+
+### 사고 기록 (2026-09-08)
+
+D3 처리 중 `brew install tree-sitter` 를 실행했더니 CLI 가 아니라 **라이브러리만 0.26 → 0.27 로 올라갔고**,
+nvim 0.12.4 가 `libtree-sitter.0.26.dylib` 에 동적 링크돼 있어 nvim 이 실행 불가가 됐다 (옛 keg 는 brew 가 삭제).
+호환 심링크는 ABI 불일치 위험이 있어 쓰지 않고 `brew upgrade neovim` (0.12.4 → 0.12.5_1, 0.27 링크) 으로 복구.
+교훈: **Homebrew 에서 nvim 의 런타임 의존성(tree-sitter, libuv 등)을 단독으로 올리지 말 것** — `brew upgrade` 로 함께 올리거나, 올리기 전 `brew deps --installed neovim` 확인.
+
+이어서 시도한 `brew install tree-sitter-cli` 는 Intel 맥에 bottle 이 없어 llvm@22(1.6GB) + Homebrew `rust` 툴체인을
+의존성으로 설치하기 시작했고(rustup 과 PATH 충돌), 중단 후 llvm@22 · rust 를 제거했다 (cargo/rustc 는 rustup 것으로 복귀 확인).
+부수 효과로 `pkgconf` 가 3.0.5 → 3.0.7 로 올라감 (옛 keg 는 `brew cleanup pkgconf` 로 정리 가능, 무해).
 
 ---
 
@@ -71,5 +82,5 @@
 |---|---|---|---|
 | D1 | pyright 진단 끄고 ruff 만 진단 / 완성·이동은 pyright | **(a) 채택.** `analysis.ignore = {"*"}` 유지, `typeCheckingMode` 삭제. 타입 에러는 안 보임을 인지 | 2026-09-08 |
 | D2 | toggleterm 제거, snacks.terminal 로 float·bottom·right | **`<C-\>` 채택.** `<leader>tt`/`to` 는 neotest 에 반환. float 인스턴스는 `count = 9` 로 분리 | 2026-09-08 |
-| D3 | tree-sitter CLI | | |
-| D4 | rust-analyzer 출처 | | |
+| D3 | tree-sitter CLI | **mason 것 + PATH 선행 추가 채택.** brew 는 `tree-sitter`(라이브러리, nvim 링크 파손) / `tree-sitter-cli`(Intel 맥에서 llvm+rust 의존) 둘 다 부적합 | 2026-09-08 |
+| D4 | rust-analyzer 출처 | **rustup 컴포넌트 채택.** mason 은 PATH 앞에 끼어들어 rustup 것을 가리므로 설치본까지 제거 | 2026-09-08 |
