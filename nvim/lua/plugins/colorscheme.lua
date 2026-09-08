@@ -1,6 +1,12 @@
 -- 다크/라이트 전환은 nvim 이 터미널 배경색을 자동 감지해 'background' 를 세팅하고(:h 'background'),
 -- tokyonight 가 background=light 일 때 light_style 을 쓰는 방식으로 처리한다. (셸 호출 없음)
 -- 터미널(ghostty) 쪽도 OS 테마를 따라가도록 theme = light:...,dark:... 로 둬야 실제로 전환된다.
+--
+-- 팔레트는 helix / ghostty 와 맞춘다:
+--   ghostty TokyoNight 배경 = #1a1b26 = night 팔레트, helix 내장 tokyonight 테마도 night.
+--   transparent = true 라 nvim 은 ghostty 배경 위에 글자만 얹으므로, 여기서 moon 을 쓰면
+--   night 배경 위에 moon 색이 올라가 미묘하게 어긋난다. night 로 두면 13개 역할 중 12개가
+--   helix 테마와 hex 단위로 같아진다 (constructor 만 다름: helix 는 aqua, tokyonight 은 purple).
 
 -- 테마가 배경을 칠하지 않게 할 하이라이트 그룹 (transparent 와 맞추기 위해)
 local transparent_groups = {
@@ -10,23 +16,52 @@ local transparent_groups = {
   "^TSDefinitionUsage",
 }
 
+-- jdtls 의 semantic token 은 treesitter 보다 우선순위가 높아(125 > 100) treesitter 하이라이트를 덮는다.
+-- 그 결과 Java 에서만 구분이 뭉개진다:
+--   · static final 상수(MAX)가 일반 필드와 같은 색이 된다  (@constant → @lsp.type.property.java)
+--   · 메서드가 @lsp.type.method.java 로 덮여 styles.functions 의 italic 이 먹지 않는다
+-- 이 그룹들을 비워 두면 아래 treesitter 하이라이트가 그대로 드러난다.
+-- (helix 는 semantic token 을 요청조차 하지 않아서 항상 treesitter 만으로 칠한다 — 그 모양에 맞춘 것)
+-- 단 namespace 는 treesitter 가 package 이름을 @variable 로 잡아 semantic 쪽이 더 나으므로 남긴다.
+local java_semantic_passthrough = {
+  "@lsp.type.class.java",
+  "@lsp.type.interface.java",
+  "@lsp.type.enum.java",
+  "@lsp.type.enumMember.java",
+  "@lsp.type.method.java",
+  "@lsp.type.property.java",
+  "@lsp.type.parameter.java",
+  "@lsp.type.variable.java",
+  "@lsp.type.typeParameter.java",
+}
+
 return {
   "folke/tokyonight.nvim",
   opts = {
-    style = "moon", -- background=dark 일 때
+    style = "night", -- background=dark 일 때 (helix · ghostty 와 동일 팔레트)
     light_style = "day", -- background=light 일 때
     transparent = true,
     styles = {
       sidebars = "transparent",
       floats = "transparent",
+      -- helix 내장 테마는 function 을 italic 으로 준다 (comment · keyword 는 tokyonight 기본값)
+      functions = { italic = true },
     },
-    on_highlights = function(hl)
+    on_highlights = function(hl, c)
       for group, opts in pairs(hl) do
         for _, pattern in ipairs(transparent_groups) do
           if group:match(pattern) then
             opts.bg = "none"
           end
         end
+      end
+
+      -- helix: "variable.parameter" = { fg = yellow, modifiers = ["italic"] }
+      hl["@variable.parameter"] = { fg = c.yellow, italic = true }
+
+      -- 위 설명 참고: 비워서 treesitter 가 보이게 한다
+      for _, group in ipairs(java_semantic_passthrough) do
+        hl[group] = {}
       end
     end,
   },
