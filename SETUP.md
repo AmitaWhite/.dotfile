@@ -63,7 +63,7 @@ LSP 자체는 mason 이 자동 설치하지만, **런타임/툴체인은 시스�
 | **Python** | python3, uv | pyright(완성·이동) + ruff(진단·포맷). 진단은 ruff 만 (D1) | `uv python install 3.13`. 프로젝트 venv 는 `<leader>cv` 로 선택 |
 | **TS/JS** | node | vtsls · eslint · biome · prettier 전부 node. 디버그 실행기는 `tsx` 있으면 사용 | `npm i -g tsx` (선택) |
 | **C/C++** | clangd (mason) + 프로젝트의 `compile_commands.json` | 없으면 헤더 못 찾음 | CMake: `-DCMAKE_EXPORT_COMPILE_COMMANDS=ON`, 또는 `bear` |
-| **SQL** | DB 클라이언트 바이너리 | vim-dadbod 가 `psql`/`mysql`/`sqlite3` 를 **셸로 호출**한다. LSP 는 postgres_lsp(mason) | `postgresql`(psql), `mysql-client`, `sqlite` |
+| **SQL** | DB 클라이언트 바이너리 | vim-dadbod 가 `psql`/`mysql`/`sqlite3` 를 **셸로 호출**한다. LSP 는 postgres_lsp(mason) — 단 **프로젝트 루트에 `postgres-language-server.jsonc` 가 있어야 붙는다** (`workspace_required`). 낱개 .sql 파일엔 안 붙음 | `postgresql`(psql), `mysql-client`, `sqlite`. 프로젝트에서 `postgres-language-server init` |
 | **Docker** | (없음) | dockerls · hadolint 모두 mason | |
 | **Markdown** | (없음) | markdown-preview 는 첫 빌드 때 바이너리 다운로드(인터넷 필요) | |
 
