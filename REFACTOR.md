@@ -50,9 +50,10 @@
 
 ## Phase 4 — 성능 · 관용구
 
-- [ ] `lua/utils/system-color.lua` — spec 파싱 시점 동기 `io.popen`(~13ms/136ms) 제거. `vim.system` 비동기 또는 `vim.o.background` 기반으로
-- [ ] `lua/plugins/colorscheme.lua` — `init = colorscheme("tokyonight")` 제거, LazyVim `opts.colorscheme` 방식으로 (현재 이중 적용)
-- [ ] `nvim --startuptime` 전후 비교 기록 (기준: 136ms)
+- [x] `lua/utils/system-color.lua` 삭제 — nvim TUI 의 터미널 배경 자동 감지(`:h 'background'`) + tokyonight `light_style = "day"` 로 대체. 셸 호출 0. 실측: background light/dark 전환 시 `tokyonight-day` ↔ `tokyonight-moon` 자동 재로드 (D 결정 (a))
+- [x] `lua/plugins/colorscheme.lua` — `init = colorscheme("tokyonight")` 제거, LazyVim 기본 로더에 위임 (이중 적용 해소)
+- [x] `nvim --startuptime` — 136ms(리팩터 전, 단일 측정) → **67ms**(Phase 4 후, 3회 중 최소). Phase 1 플러그인 삭제 + popen 제거 효과
+- [ ] ghostty `~/.config/ghostty/config` 를 `theme = light:TokyoNight Day,dark:TokyoNight Moon` 으로 (저장소 밖, 수동 적용)
 
 ## Phase 5 — 설계 결정 반영
 
