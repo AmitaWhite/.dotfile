@@ -45,14 +45,22 @@ vim.api.nvim_create_autocmd("FileType", {
       end
       vim.b[buf].pdf_page = page
       Snacks.image.buf.attach(buf, { src = file .. "#page=" .. page })
-      vim.notify(("PDF %d / %s"):format(page, type(total) == "number" and total or "?"), vim.log.levels.INFO, { title = "PDF" })
+      vim.notify(
+        ("PDF %d / %s"):format(page, type(total) == "number" and total or "?"),
+        vim.log.levels.INFO,
+        { title = "PDF" }
+      )
     end
 
     local map = function(lhs, fn, desc)
       vim.keymap.set("n", lhs, fn, { buffer = buf, desc = desc })
     end
-    map("]p", function() goto_page(vim.b[buf].pdf_page + 1) end, "PDF 다음 페이지")
-    map("[p", function() goto_page(vim.b[buf].pdf_page - 1) end, "PDF 이전 페이지")
+    map("]p", function()
+      goto_page(vim.b[buf].pdf_page + 1)
+    end, "PDF 다음 페이지")
+    map("[p", function()
+      goto_page(vim.b[buf].pdf_page - 1)
+    end, "PDF 이전 페이지")
     map("gp", function()
       vim.ui.input({ prompt = "PDF 페이지: " }, function(s)
         local n = tonumber(s)
