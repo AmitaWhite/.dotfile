@@ -1,5 +1,5 @@
-return -- add any tools you want to have installed below
-{
+-- mason 으로 설치할 도구들
+return {
   "mason-org/mason.nvim",
   opts = {
     ensure_installed = {
@@ -7,12 +7,8 @@ return -- add any tools you want to have installed below
       "shellcheck",
       "shfmt",
       "rust-analyzer",
+      "lemminx", -- XML LSP
     },
-    ui = {
-      border = "rounded",
-    },
+    -- ui.border 는 vim.o.winborder ("rounded") 를 따라감 (config/options.lua)
   },
-  opt = function(_, opts)
-    vim.list_extend(opts.ensure_installed, { "lemminx" })
-  end,
 }
