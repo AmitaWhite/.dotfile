@@ -35,11 +35,11 @@
 
 ## Phase 2 — 충돌 해소 (LazyVim 기능 회복)
 
-- [ ] `<leader>tt` / `<leader>to` 를 neotest 에 반환 (toggleterm 제거 — D2)
+- [x] `<leader>tt` / `<leader>to` 를 neotest 에 반환 — `toggleterm.lua` 삭제, 플로팅 터미널은 `<C-\>` 로 snacks.terminal (D2)
 - [x] `<leader>sh` 를 snacks Help Pages 에 반환 (Phase 1 keymaps 삭제로 해결)
 - [x] `<leader>n` 알림 히스토리 지연 해소 (Phase 1 `<leader>nh` 삭제로 해결)
-- [ ] `docstrings.lua` — `vim.g.doge_*` 설정을 `config` → `init` 으로. `<leader>d` DAP 그룹 overlap 해소
-- [ ] which-key health 로 overlap 0 확인
+- [x] `docstrings.lua` — `vim.g.doge_*` 설정을 `config` → `init` 으로. `<leader>d` DAP 그룹 overlap 해소 (실측: `<leader>d` doge 매핑 소멸)
+- [x] which-key health — 내 키맵 기인 overlap 0. 남은 1건(`<leader>dP` ↔ `dPc`/`dPt`)은 LazyVim python·dap extra 자체 것
 
 ## Phase 3 — 구조 재편
 
@@ -57,7 +57,7 @@
 ## Phase 5 — 설계 결정 반영
 
 - [x] D1 pyright/ruff 역할 확정 → `nvim-lspconfig.lua` 반영 (Phase 1 에서 처리)
-- [ ] D2 터미널 단일화 → snacks.terminal 3 레이아웃 키맵
+- [x] D2 터미널 단일화 → snacks.terminal 3 레이아웃 (`<C-/>` bottom · `<leader>fh` right · `<C-\>` float), Phase 2 에서 처리
 - [ ] D3 tree-sitter CLI — `brew install tree-sitter` 또는 감수 (mason 것은 mason 로드 후에만 PATH)
 - [ ] D4 mason `rust-analyzer` — rustup 것으로 통일할지
 - [ ] README 키맵 표 · 알아둘 점 갱신
@@ -69,6 +69,6 @@
 | # | 주제 | 결정 | 날짜 |
 |---|---|---|---|
 | D1 | pyright 진단 끄고 ruff 만 진단 / 완성·이동은 pyright | **(a) 채택.** `analysis.ignore = {"*"}` 유지, `typeCheckingMode` 삭제. 타입 에러는 안 보임을 인지 | 2026-09-08 |
-| D2 | toggleterm 제거, snacks.terminal 로 float·bottom·right | 보류 — float 키를 `<leader>tt` 로 유지할지(neotest run-file 을 `<leader>tf` 로 이동) vs `<C-\>` | |
+| D2 | toggleterm 제거, snacks.terminal 로 float·bottom·right | **`<C-\>` 채택.** `<leader>tt`/`to` 는 neotest 에 반환. float 인스턴스는 `count = 9` 로 분리 | 2026-09-08 |
 | D3 | tree-sitter CLI | | |
 | D4 | rust-analyzer 출처 | | |
