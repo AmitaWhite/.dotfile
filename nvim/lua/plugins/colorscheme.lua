@@ -68,6 +68,7 @@ return {
       -- python·typescript 는 helix 도 import 를 cyan 으로 세분화하므로 java 에서만 바꾼다.
       -- (treesitter 는 capture 마다 "@<capture>.<lang>" 그룹을 먼저 찾는다 — 실측 확인)
       hl["@keyword.import.java"] = { fg = c.purple, italic = true }
+      hl["@keyword.repeat.java"] = { fg = c.purple, italic = true }
 
       -- 위 설명 참고: 비워서 treesitter 가 보이게 한다
       for _, group in ipairs(java_semantic_passthrough) do
