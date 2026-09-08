@@ -1,6 +1,6 @@
 # nvim 설정 리팩터링 계획
 
-진단 기준: 2026-09-08, LazyVim `83d90f3`, nvim 0.12.4 (Phase 5 중 0.12.5 로 업그레이드, 아래 사고 기록 참고).
+진단 기준: 2026-09-08, LazyVim `c10948c`, nvim 0.12.4 (Phase 5 중 0.12.5 로 업그레이드, 아래 사고 기록 참고).
 근거는 LazyVim 소스와 런타임 실측(VeryLazy 후 `nvim_get_keymap`, which-key health, `vim.ui.*` 소유자).
 
 한 줄 원인: 서로 다른 시대의 LazyVim 문서를 복붙한 설정이 재정렬 없이 쌓였고,
@@ -53,7 +53,7 @@
 - [x] `lua/utils/system-color.lua` 삭제 — nvim TUI 의 터미널 배경 자동 감지(`:h 'background'`) + tokyonight `light_style = "day"` 로 대체. 셸 호출 0. 실측: background light/dark 전환 시 `tokyonight-day` ↔ `tokyonight-moon` 자동 재로드 (D 결정 (a))
 - [x] `lua/plugins/colorscheme.lua` — `init = colorscheme("tokyonight")` 제거, LazyVim 기본 로더에 위임 (이중 적용 해소)
 - [x] `nvim --startuptime` — 136ms(리팩터 전, 단일 측정) → **67ms**(Phase 4 후, 3회 중 최소). Phase 1 플러그인 삭제 + popen 제거 효과
-- [ ] ghostty `~/.config/ghostty/config` 를 `theme = light:TokyoNight Day,dark:TokyoNight Moon` 으로 (저장소 밖, 수동 적용)
+- [x] ghostty 테마 `light:TokyoNight Day,dark:TokyoNight Moon` — `~/.config/ghostty/config` 가 저장소의 `caelestia-backup.bak/ghostty/mac-config.bak` 심링크라 그 파일을 수정. 적용은 ghostty 설정 리로드(⌘⇧,)
 
 ## Phase 5 — 설계 결정 반영
 
