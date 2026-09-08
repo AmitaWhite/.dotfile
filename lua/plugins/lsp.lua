@@ -1,4 +1,4 @@
--- LSP 서버 설정 (Phase 3 에서 lua/plugins/lsp.lua 로 통합 예정)
+-- LSP 서버 설정. LazyVim extras 가 다루지 않는 서버나, extras 기본값을 바꿀 때만 여기에 적는다
 return {
   "neovim/nvim-lspconfig",
   opts = {

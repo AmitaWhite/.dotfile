@@ -43,8 +43,8 @@
 
 ## Phase 3 — 구조 재편
 
-- [ ] `lua/config/lazy.lua` 하드코딩 extras(typescript · json · toml · python · clangd) → `lazyvim.json` 으로 이동. `:LazyExtras` 에서 전부 보이는지 확인
-- [ ] `lua/plugins/nvim-lspconfig.lua` → `lua/plugins/lsp.lua` 로 rename
+- [x] `lua/config/lazy.lua` 하드코딩 extras(typescript · json · toml · python · clangd) → `lazyvim.json` 으로 이동. 실측: 플러그인 55 · extras 22 · LSP 서버 25 로 전후 동일, `LazyVim.has_extra()` 5개 모두 true
+- [x] `lua/plugins/nvim-lspconfig.lua` → `lua/plugins/lsp.lua` 로 rename
 - [x] `lazy.lua` 의 `{ import = "lsp" }` 제거 (Phase 1 에서 처리)
 - [ ] `lua/lsp/` 디렉토리 — `typescript.lua.bak` 만 남음. 백업 보존 정책상 유지, 단 새 파일 넣지 말 것
 
