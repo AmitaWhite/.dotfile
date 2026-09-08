@@ -1,0 +1,53 @@
+[options]
+preset_column_widths = [0.25, 0.33, 0.5, 0.66, 0.75, 0.9]
+animation_speed = 20
+# virtual_workspace_animations = true
+
+[padding]
+top = 6
+bottom = 6
+left = 6
+right = 6
+
+[windows.default]
+title=".*"
+width=0.5
+horizontal_padding=4
+vertical_padding=4
+
+[decorations.active.border]
+enabled = false
+color = "#89b4fa"
+width = 2.0
+radius = "auto"
+
+[bindings]
+window_focus_west = "cmd - h"
+window_focus_east = "cmd - l"
+window_focus_north = "cmd - k"   # 스택 레이아웃 시 위로
+window_focus_south = "cmd - j"   # 스택 레이아웃 시 아래로
+
+# 창 위치 바꾸기 (Swap)
+window_swap_west = "cmd + shift - h"
+window_swap_east = "cmd + shift - l"
+
+window_virtual_north = "cmd + shift - k"   # 위 줄로
+window_virtual_south = "cmd + shift - j"   # 아래 줄로
+
+window_virtualmove_north = "cmd + alt - k"
+window_virtualmove_south = "cmd + alt - j"
+
+# 창 크기 조정 (사전 지정된 크기 사이클링)
+window_resize = "alt - equal"        # 크기 사이클 (Grow 방향)
+window_shrink = "alt - minus"    # 크기 사이클 (Shrink 방향)
+window_fullwidth = "cmd - f"     # 전체 가로폭 채우기
+
+# 타일링 <-> 플로팅 전환
+window_manage = "cmd - g"
+
+# 세로 스택 쌓기
+window_stack = "alt - s"
+window_unstack = "alt - u"
+
+# 종료
+quit = "alt + shift - q"
