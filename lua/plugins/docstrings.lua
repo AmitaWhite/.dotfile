@@ -3,9 +3,7 @@ return {
     "kkoomen/vim-doge",
     -- 플러그인 설치 후 자동으로 바이너리 설치 (최초 1회 실행)
     build = ":call doge#install()",
-    -- 특정 명령어 사용 시에만 로드되도록 지연 로딩(Lazy Load) 설정
-    cmd = { "DogeGenerate", "DogeCreateDocStandard" },
-    -- 특정 키를 누를 때 플러그인 로드 및 실행
+    -- 해당 filetype 을 열 때 로드 (cmd 트리거는 ft 보다 늦게 오므로 불필요)
     ft = { "python", "javascript", "typescript", "cpp", "c", "rust", "go", "java" },
     keys = {
       { "<leader>cD", "<cmd>DogeGenerate<cr>", desc = "Document Generation (Doge)" },
