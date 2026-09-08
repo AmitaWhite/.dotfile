@@ -6,35 +6,36 @@
 ## 0. 한눈에
 
 ```txt
-1. 저장소 clone → ~/.config/nvim
-2. 심링크 걸기 (§1)
+1. git clone git@github.com:AmitaWhite/.dotfile.git ~/.dotfiles
+2. ~/.dotfiles/link.sh --dry-run  →  ~/.dotfiles/link.sh     (§1)
 3. 필수 도구 설치 (§2)  ← 이것만 있으면 nvim 은 뜬다
 4. 언어 툴체인 (§3)      ← 쓰는 언어만
 5. 선택 기능 (§4)        ← 이미지·PDF·DB 등
 6. nvim 첫 실행 → :Lazy sync → :checkhealth (§6)
 ```
 
-## 1. 저장소 → 실제 경로 매핑
+## 1. 심링크 — `link.sh` + `links.txt`
 
-이 저장소는 nvim 외 설정도 담고 있고, 일부는 **저장소 안 파일로 심링크**해서 쓴다.
-새 머신에서는 아래를 다시 걸어야 한다.
-
-| 실제 경로 | 저장소 안 파일 | 비고 |
-| --- | --- | --- |
-| `~/.config/nvim` | (저장소 루트) | clone 위치 |
-| `~/.config/ghostty/config` | `caelestia-backup.bak/ghostty/mac-config.bak` | mac. Linux 는 `arch-config.bak` |
-| `~/.config/helix/config.toml` | `caelestia-backup.bak/helix/config.toml` | |
-| `~/.config/helix/languages.toml` | `caelestia-backup.bak/helix/language.toml` | 파일명 다름 주의 |
-| `~/.config/helix/themes/tokyonight.toml` | `caelestia-backup.bak/helix/theme/tokyonight.toml` | |
-| `~/.config/fastfetch/config.jsonc.bak` | `caelestia-backup.bak/fastfetch/config.jsonc` | |
+저장소는 `~/.dotfiles` 에 두고, 실제 경로엔 **심링크만** 있다. 어디에 무엇이 걸리는지는 [links.txt](links.txt) 한 파일이 전부다
+(`<플랫폼> <저장소 경로> <실제 경로>`, 플랫폼은 `all` / `mac` / `linux`, WSL 은 linux).
 
 ```bash
-# 예: ghostty (mac)
-mkdir -p ~/.config/ghostty && ln -sf ~/.config/nvim/caelestia-backup.bak/ghostty/mac-config.bak ~/.config/ghostty/config
+~/.dotfiles/link.sh --dry-run     # 무엇을 할지만 본다
+~/.dotfiles/link.sh               # 현재 플랫폼 항목 링크
+~/.dotfiles/link.sh --unlink      # 이 스크립트가 건 링크만 해제
 ```
 
-저장소에 **없는** 것 (머신마다 따로): `~/.config/fish/config.fish`(mac 용 — 저장소의 `caelestia-backup.bak/fish/` 는 Linux 용 백업),
-hyprland/niri/foot 은 Linux 전용 백업이며 Wayland 세션에서만 의미 있다.
+동작 규칙:
+- 이미 올바른 링크면 `ok`, 다른 곳을 가리키는 링크면 `relink`(백업 없음 — 링크는 데이터가 아니다)
+- **실파일이 있으면 절대 덮어쓰지 않고** `<파일>.pre-link-<시각>` 으로 옮긴다. 내용 확인 후 지우면 된다
+- 저장소 쪽 파일이 없으면 `SKIP` (매니페스트 오타 방지)
+
+새 앱을 번들에 넣을 때: 파일을 앱 디렉토리에 두고 `links.txt` 에 한 줄 추가 → `link.sh`.
+
+주의:
+- `~/.config/nvim` 자체가 `~/.dotfiles/nvim` 링크다. lazy.nvim 은 `stdpath("config")` 를 통해 링크 너머의 `lazy-lock.json` 에 쓴다 (확인됨)
+- fish 는 `config.fish` · `fish_plugins` · `functions/fish_greeting.fish` 만 링크. `conf.d/`·`fish_variables` 는 fisher/fish 가 만드는 머신 상태라 저장소에 없다. 새 머신에선 fisher 설치 후 `fisher update` 로 `fish_plugins` 목록이 복원된다
+- `linux/` 의 hypr · niri · foot · btop · thunar 는 Wayland 세션에서만 의미 있다. thunar 는 실제 경로가 `~/.config/Thunar`(대문자)
 
 ## 2. 필수 — 없으면 `:checkhealth` 가 빨갛다
 

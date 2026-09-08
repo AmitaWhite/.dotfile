@@ -72,6 +72,16 @@
 - [x] PDF 페이지 넘기기 — snacks.image 엔 키가 없고 `src#page=N` 으로 고르는 구조 → `autocmds.lua` 에 `]p` `[p` `gp` (filetype=image + .pdf 버퍼 한정, 총 페이지는 gs 로)
 - [x] `lazy-lock.json` 현행화 (커밋본이 설치본보다 낡아 있었음, 36개)
 
+## Phase 7 — 번들 구조 (dotfiles 레이아웃)
+
+- [x] 저장소를 `~/.config/nvim` → **`~/.dotfiles`** 로 이동, `~/.config/nvim` 은 `~/.dotfiles/nvim` 심링크. lazy.nvim 은 링크 너머로 정상 동작 (stdpath · lockfile 경로 확인)
+- [x] `caelestia-backup.bak/` 해체 → 앱별 디렉토리 (`ghostty/ helix/ fish/{mac,linux} starship/ fastfetch/ linux/{hypr,niri,foot,btop,thunar}`). 전부 `git mv` 라 이력 유지 (53 renames)
+- [x] `.bak` 접미사 폐지. 안 쓰는 것은 `archive/` (wezterm.lua · paneru.toml · nvim-typescript.lua)
+- [x] mac fish 를 번들에 편입 (`config.fish` · `fish_plugins` · `functions/fish_greeting.fish`). fisher 산출물(`conf.d/sdk.fish`)·`fish_variables`·terax 통합은 제외
+- [x] `link.sh` + `links.txt` — 플랫폼별 매니페스트, 실파일은 `.pre-link-<시각>` 백업, 심링크는 relink, `--dry-run` / `--unlink`
+- [x] 잘못 걸려 있던 `~/.config/fastfetch/config.jsonc.bak` 링크 제거 (fastfetch 가 읽지 않는 이름이었음). mac 에선 fastfetch 를 링크하지 않음
+- [ ] 리눅스/WSL 에서 `link.sh` 실행해 `linux` 항목 검증 (특히 fish/linux, Thunar 경로)
+
 ### 사고 기록 (2026-09-08)
 
 D3 처리 중 `brew install tree-sitter` 를 실행했더니 CLI 가 아니라 **라이브러리만 0.26 → 0.27 로 올라갔고**,

@@ -1,0 +1,29 @@
+# link.sh 매니페스트.  <플랫폼>  <저장소 안 경로>  <실제 경로>
+# 플랫폼: all | mac | linux   (WSL 은 linux)
+# 실제 경로가 이미 실파일이면 덮어쓰지 않고 *.pre-link-<시각> 으로 옮긴다.
+
+# ---- 공통 ----
+all    nvim                                     ~/.config/nvim
+all    helix/config.toml                        ~/.config/helix/config.toml
+all    helix/languages.toml                     ~/.config/helix/languages.toml
+all    helix/themes/tokyonight.toml             ~/.config/helix/themes/tokyonight.toml
+all    starship/starship.toml                   ~/.config/starship.toml
+
+# ---- mac ----
+mac    ghostty/config.mac                       ~/.config/ghostty/config
+mac    fish/mac/config.fish                     ~/.config/fish/config.fish
+mac    fish/mac/fish_plugins                    ~/.config/fish/fish_plugins
+mac    fish/mac/functions/fish_greeting.fish    ~/.config/fish/functions/fish_greeting.fish
+
+# ---- linux (Arch / CachyOS / WSL) ----
+linux  ghostty/config.arch                      ~/.config/ghostty/config
+linux  fish/linux/config.fish                   ~/.config/fish/config.fish
+linux  fish/linux/functions/fish_greeting.fish  ~/.config/fish/functions/fish_greeting.fish
+linux  fastfetch/config.jsonc                   ~/.config/fastfetch/config.jsonc
+linux  linux/foot/foot.ini                      ~/.config/foot/foot.ini
+linux  linux/btop/btop.conf                     ~/.config/btop/btop.conf
+linux  linux/btop/themes/caelestia.theme        ~/.config/btop/themes/caelestia.theme
+linux  linux/hypr                               ~/.config/hypr
+linux  linux/niri/config.kdl                    ~/.config/niri/config.kdl
+linux  linux/thunar/uca.xml                     ~/.config/Thunar/uca.xml
+linux  linux/thunar/thunar-volman.xml           ~/.config/Thunar/thunar-volman.xml

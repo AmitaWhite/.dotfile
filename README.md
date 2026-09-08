@@ -1,7 +1,20 @@
 # dotfiles
 
-Neovim 설정(LazyVim starter 기반)이 메인이고, 다른 머신에서 쓰던 config 백업
-(`caelestia-backup.bak/`, `*.bak`)이 같이 들어있는 개인 저장소.
+macOS · Arch/CachyOS · WSL 을 오가며 쓰는 설정 번들. 저장소는 `~/.dotfiles` 에 두고, 앱별 디렉토리를
+`link.sh` 가 실제 경로(`~/.config/...`)에 심링크로 건다. 어느 파일이 어디에 걸리는지는 `links.txt` 가 전부다.
+
+```txt
+nvim/        Neovim (LazyVim)  → ~/.config/nvim          ← 이 README 의 대부분은 이것
+ghostty/     config.mac · config.arch                    (플랫폼별)
+helix/       config.toml · languages.toml · themes/
+fish/        mac/ · linux/     (config.fish · fish_plugins · functions/)
+starship/    starship.toml
+fastfetch/   config.jsonc                                (linux)
+linux/       hypr · niri · foot · btop · thunar          (Wayland DE, linux 전용)
+archive/     안 쓰지만 버리지 않은 것 (wezterm · paneru · 옛 nvim tsserver 설정)
+docs/        기능 가이드
+link.sh · links.txt   심링크 스크립트 · 매니페스트
+```
 
 | 문서 | 내용 |
 | --- | --- |
@@ -18,17 +31,19 @@ Neovim 설정(LazyVim starter 기반)이 메인이고, 다른 머신에서 쓰�
 
 ### 설정 파일 맵
 
+`~/.config/nvim` → `~/.dotfiles/nvim` 심링크. 아래 경로는 `nvim/` 기준.
+
 ```txt
 init.lua                  부트스트랩 → lua/config/lazy.lua
 lazyvim.json              활성 extras 목록 (:LazyExtras 가 관리, 직접 편집도 가능)
+lazy-lock.json            플러그인 버전 고정 (lazy.nvim 이 심링크 너머로 여기에 쓴다)
 lua/config/
   lazy.lua                lazy.nvim 셋업, 성능/UI 옵션 (extras 는 여기 안 적음)
-  options.lua             vim 옵션 (wrap, winborder …)
+  options.lua             vim 옵션 (wrap, winborder, mason bin PATH …)
   keymaps.lua             개인 키맵 — LazyVim 과 겹치지 않는 것만
-  autocmds.lua            (현재 비어있음)
+  autocmds.lua            PDF 페이지 넘기기 (]p [p gp)
 lua/plugins/*.lua         플러그인별 오버라이드 (파일 1개 = 플러그인 1개)
   lsp.lua                 LSP 서버 설정 — extras 가 안 다루는 서버 · extras 기본값 변경만
-lua/lsp/                  옛 설정 백업(.bak)만 있음. 새 파일 넣지 말 것
 ```
 
 옵션/키맵/오토커맨드는 LazyVim 이 `VeryLazy` 에서 자동 로드한다.
