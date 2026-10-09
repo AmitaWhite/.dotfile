@@ -17,12 +17,29 @@
 ## 1. 심링크 — `link.sh` + `links.txt`
 
 저장소는 `~/.dotfiles` 에 두고, 실제 경로엔 **심링크만** 있다. 어디에 무엇이 걸리는지는 [links.txt](links.txt) 한 파일이 전부다
-(`<플랫폼> <저장소 경로> <실제 경로>`, 플랫폼은 `all` / `mac` / `linux`, WSL 은 linux).
+(`<플랫폼> <저장소 경로> <실제 경로> [모드]`, 플랫폼은 `all` / `mac` / `linux`, WSL 은 linux).
 
 ```bash
 ~/.dotfiles/link.sh --dry-run     # 무엇을 할지만 본다
 ~/.dotfiles/link.sh               # 현재 플랫폼 항목 링크
+~/.dotfiles/link.sh --pull        # 도구가 소유한 설정을 시스템 → 저장소로 가져온다
 ~/.dotfiles/link.sh --unlink      # 이 스크립트가 건 링크만 해제
+```
+
+**모드** (4번째 칸, 생략하면 `link`):
+
+| 모드 | 소유자 | 동작 |
+| --- | --- | --- |
+| `link` | 저장소 | 실제 경로에 심링크를 건다 |
+| `pull` | 도구 | 링크하지 않는다. `--pull` 일 때만 시스템 → 저장소로 복사 |
+
+`pull` 이 필요한 이유: DankMaterialShell 처럼 **도구가 설정 파일을 직접 쓰는** 경우, 저장 시
+임시 파일 + rename 으로 **심링크가 일반 파일로 대체**된다. 그러면 다음 `link.sh` 가 그걸 실파일로 보고
+`.pre-link-<시각>` 으로 백업한 뒤 저장소 것을 되돌려, 도구의 변경이 사라진 것처럼 보인다.
+`pull` 항목은 평소 실행에서 `pull?` 로만 표시되고 건드리지 않는다. 반영하려면:
+
+```bash
+~/.dotfiles/link.sh --pull && cd ~/.dotfiles && git diff   # 확인 후 커밋
 ```
 
 동작 규칙:

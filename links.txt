@@ -1,5 +1,8 @@
-# link.sh 매니페스트.  <플랫폼>  <저장소 안 경로>  <실제 경로>
+# link.sh 매니페스트.  <플랫폼>  <저장소 안 경로>  <실제 경로>  [모드]
 # 플랫폼: all | mac | linux   (WSL 은 linux)
+# 모드  : link(기본) = 저장소가 소유, 심링크를 건다
+#         pull       = 도구가 소유. 심링크를 걸면 도구의 저장이 날아가므로 링크하지 않고,
+#                      ./link.sh --pull 로 시스템 → 저장소 방향으로만 가져온다.
 # 실제 경로가 이미 실파일이면 덮어쓰지 않고 *.pre-link-<시각> 으로 옮긴다.
 
 # ---- 공통 ----
@@ -23,7 +26,9 @@ linux  fastfetch/config.jsonc                   ~/.config/fastfetch/config.jsonc
 linux  linux/foot/foot.ini                      ~/.config/foot/foot.ini
 linux  linux/btop/btop.conf                     ~/.config/btop/btop.conf
 linux  linux/btop/themes/caelestia.theme        ~/.config/btop/themes/caelestia.theme
-linux  linux/hypr                               ~/.config/hypr
-linux  linux/niri/config.kdl                    ~/.config/niri/config.kdl
+# linux/hypr 은 hyprland 시절 설정. 지금은 niri 를 쓰므로 링크하지 않고 보관만 한다.
+# niri config.kdl 은 DankMaterialShell 이 생성·관리한다 (Material3 색상 반영 포함).
+# 심링크를 걸면 DMS 저장 시 심링크가 일반 파일로 바뀌고 다음 link.sh 가 저장소 것으로 되돌린다.
+linux  linux/niri/config.kdl                    ~/.config/niri/config.kdl                 pull
 linux  linux/thunar/uca.xml                     ~/.config/Thunar/uca.xml
 linux  linux/thunar/thunar-volman.xml           ~/.config/Thunar/thunar-volman.xml

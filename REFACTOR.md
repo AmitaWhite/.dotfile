@@ -95,6 +95,41 @@ nvim 0.12.4 가 `libtree-sitter.0.26.dylib` 에 동적 링크돼 있어 nvim 이
 
 ---
 
+## Phase 8 — 도구가 소유하는 설정 (DankMaterialShell)
+
+2026-10-09, MacBook Air 2014 + CachyOS + niri + DankMaterialShell 에 저장소를 적용하다 발견.
+
+**증상**: DMS 에서 설정을 바꾼 뒤 `link.sh` 를 돌리면 DMS 의 변경이 사라지고 저장소의 `config.kdl` 로 돌아갔다.
+
+**원인**: `link.sh` 는 "저장소가 유일한 진실" 을 전제한다. DMS 처럼 도구가 설정 파일을 직접 쓰는 경우
+그 전제가 깨진다. 대부분의 프로그램은 임시 파일에 쓰고 rename 하는 방식으로 저장하는데,
+이러면 **심링크가 일반 파일로 대체**된다. 다음 `link.sh` 실행이 그걸 실파일로 보고
+`.pre-link-<시각>` 으로 백업한 뒤 저장소 것을 다시 링크한다. (변경이 날아간 게 아니라 백업에 있다.)
+
+**설계 정리** — 설정 파일은 소유권이 셋으로 갈린다:
+
+| 범주 | 예 | 방식 |
+| --- | --- | --- |
+| 저장소가 소유 (손으로 씀) | nvim · helix · fish · ghostty · foot · btop · starship | `link` (심링크) |
+| 도구가 소유, 저장소는 사본 | DMS 가 쓰는 niri `config.kdl` | **`pull`** (시스템 → 저장소) |
+| 파생 · 휘발성 | Material3 추출 색상 | 저장소에 넣지 않음 |
+
+- [x] `link.sh` 에 `pull` 모드 추가 — `links.txt` 4번째 칸. 평소엔 건드리지 않고 `./link.sh --pull` 일 때만
+      시스템 → 저장소로 복사. 동일하면 `same`, 시스템에 없으면 `SKIP`, 대상이 심링크면 `WARN`.
+      샌드박스 7개 시나리오 검증 (최초 링크 · 멱등 · **도구가 덮어쓴 뒤 재실행** · pull · same · 없음 · unlink)
+- [x] `links.txt` 에서 `linux/hypr` 링크 제거 — hyprland 시절 설정. 파일은 `linux/hypr/` 에 보관
+- [x] `niri/config.kdl` 을 `pull` 모드로 전환
+- [x] btop `caelestia.theme` 는 유지 — 유물이 아니라 `btop.conf` 의 `color_theme = "caelestia"` 가 참조한다
+- [ ] **리눅스에서 확인할 것** (이 세션은 맥이라 실측 불가):
+  - [ ] `./link.sh --pull` 로 DMS 의 `config.kdl` 을 저장소에 반영하고 커밋
+  - [ ] DMS 의 Material3 색상이 **터미널 설정도 건드리는지** — `foot.ini` 에 `[colors]` 섹션이 있어
+        DMS 가 거기 쓴다면 `foot.ini` 도 `pull` 이거나 색상 부분만 분리해야 한다. ghostty 도 마찬가지
+  - [ ] DMS 가 관리하는 파일이 `config.kdl` 말고 더 있는지 (색상 파일 · 상태 파일의 위치)
+  - [ ] 나머지 `linux` 항목 경로 검증 — `~/.config/Thunar`(대문자) · `fish/linux` · fastfetch · foot
+  - [ ] `~/.config/niri/` 에 남은 `*.pre-link-*` 백업 확인 (DMS 가 쓴 내용이 거기 있다)
+
+---
+
 ## 결정 기록 (D)
 
 | # | 주제 | 결정 | 날짜 |
