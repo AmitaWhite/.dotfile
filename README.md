@@ -3,6 +3,24 @@
 macOS · Arch/CachyOS · WSL 을 오가며 쓰는 설정 번들. 저장소는 `~/.dotfiles` 에 두고, 앱별 디렉토리를
 `link.sh` 가 실제 경로(`~/.config/...`)에 심링크로 건다. 어느 파일이 어디에 걸리는지는 `links.txt` 가 전부다.
 
+## 원칙 — 오버라이드만 담는다
+
+환경을 통째로 재구성하려는 저장소가 아니다. 프레임워크와 데스크톱 환경(LazyVim · DankMaterialShell …)이
+주는 **편의와 외형은 그대로 누리고, 내가 바꾼 것만** 저장소가 소유한다.
+
+| 담는다 | 담지 않는다 |
+| --- | --- |
+| 내가 바꾼 키맵 · 옵션 · 색 보정 | 프레임워크 기본값과 같은 설정 |
+| OS 별로 쓰는 프로그램 목록 ([TOOLS.md](TOOLS.md)) | 그 프로그램들이 생성하는 설정 · 상태 파일 |
+| 셸 설정 중 손으로 쓴 부분 | 플러그인 매니저가 만드는 것 (fisher `conf.d/`, `fish_variables` …) |
+| 도구가 쓰는 설정의 사본 (`links.txt` 의 `pull`) | 런타임 파생값 (DMS 의 Material3 추출 색 …) |
+
+애매하면 질문은 하나다 — **"환경이 이미 해주는가?"**
+해준다면 담지 않는다. 담으면 환경이 업데이트될 때마다 그것과 싸우게 된다.
+(이 원칙을 nvim 에 적용한 결과가 [REFACTOR.md](REFACTOR.md) 의 Phase 1~5 다: 플러그인 설정 파일 20 → 10)
+
+---
+
 ```txt
 nvim/        Neovim (LazyVim)  → ~/.config/nvim          ← 이 README 의 대부분은 이것
 ghostty/     config.mac · config.arch                    (플랫폼별)
